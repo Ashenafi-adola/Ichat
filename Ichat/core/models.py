@@ -25,4 +25,9 @@ class Message(models.Model):
         return self.body[0:30]
     
 class Channal(models.Model):
-    pass
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=100, null=True)
+    description = models.CharField(max_length=300, null=True)
+    subscribers = models.ManyToManyField(User, related_name="subscribers")
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)

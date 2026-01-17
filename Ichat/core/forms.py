@@ -6,8 +6,3 @@ class GroupForm(ModelForm):
     class Meta:
         model = Group
         fields = ['name', 'description']
-
-class MessageForm(ModelForm):
-    class Meta:
-        model = Message
-        fields = '__all__'

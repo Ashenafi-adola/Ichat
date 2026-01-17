@@ -9,6 +9,10 @@
     <div>
         <header>
             <h1><a href="{% url 'home' %}">I CHAT</a></h1>
+            {% if request.user.is_authenticated %}
+                <small>@{{request.user.username}}</small>
+                <p><a href="{% url 'logout' %}">logout</a></p>
+            {% endif %}
             <hr>
         </header>
     </div>
