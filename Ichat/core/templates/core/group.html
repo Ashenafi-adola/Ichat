@@ -1,5 +1,36 @@
-{% extends 'core/base.html' %}
+{% extends 'core/home.html' %}
 
-{% block content %}
-
+{% block chat %}
+<style>
+    .message-body{
+        width: 100%;
+    }
+</style>
+<div>
+    <div>
+        <h3>{{group}}</h3>
+        <small>{{group.description}}</small>
+        <hr>
+    </div>
+    <div>
+        <div>
+            <p>{{group}} created at {{group.created_at}}</p>
+        </div>
+        <div>
+            {% for message in messages %}
+                {% if message.group == group %}
+                    <div>
+                        {{message.body}}
+                    </div>
+                    <hr>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <textarea class="message-body" name="message" placeholder="Type your message..."></textarea>
+        <input type="submit" value="Send">
+    </form>
+</div>
 {% endblock %}

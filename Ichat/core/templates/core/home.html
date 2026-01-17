@@ -1,21 +1,37 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div>
+<style>
+    .main{
+        display: grid;
+        grid-template-columns: 2fr 4fr;
+    }
+</style>
+<div class="main">
     <div>
         <a href="{% url 'create_group' %}">create new group</a>
-        <h3>chat</h3>
+        <h3>chats</h3>
+        <a href="">All</a>
+        <a href="">Users</a>
+        <a href="">Groups</a>
+        <a href="">Channals</a>
+        <hr>
         <div>
             {% for group in groups %}
                 <div>
-                    <a href="">{{group.name}}</a>
+                    <a href="{% url 'group' group.id %}">{{group.name}}</a>
                 </div>
                 <hr>
             {% endfor %}
         </div>
     </div>
     <div>
+        {% if page == 'home' %}
+        <h1>select chat</h1>
+        {% endif %}
+        {% block chat %}
 
+        {% endblock %}
     </div>
 </div>
 {% endblock %}

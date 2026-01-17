@@ -16,9 +16,9 @@ class Group(models.Model):
 class Message(models.Model):
     #owner = models.ForeignKey(User, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-
     body = models.TextField()
-
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null= True)
 
 
     def __str__(self):
