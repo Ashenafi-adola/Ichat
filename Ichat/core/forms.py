@@ -5,7 +5,7 @@ from .models import Group, Message
 class GroupForm(ModelForm):
     class Meta:
         model = Group
-        fields = '__all__'
+        fields = ['name', 'description']
 
 class MessageForm(ModelForm):
     class Meta:
