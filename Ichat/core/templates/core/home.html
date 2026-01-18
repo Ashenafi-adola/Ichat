@@ -1,37 +1,37 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<style>
-    .main{
-        display: grid;
-        grid-template-columns: 2fr 4fr;
-    }
-</style>
-<div class="main">
-    <div>
-        <a href="{% url 'create_group' %}">create new group</a>
-        <h3>chats</h3>
-        <a href="">All</a>
-        <a href="">Users</a>
-        <a href="">Groups</a>
-        <a href="">Channals</a>
-        <hr>
-        <div>
-            {% for group in groups %}
-                <div>
-                    <a href="{% url 'group' group.id %}">{{group.name}}</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 col-lg-3 border-end">
+            <div class="p-3">
+                <a href="{% url 'create_group' %}" class="btn btn-primary mb-3">Create New Group</a>
+                <h3 class="h5">Chats</h3>
+                <div class="nav flex-column">
+                    <a href="#" class="nav-link">All</a>
+                    <a href="#" class="nav-link">Users</a>
+                    <a href="#" class="nav-link">Groups</a>
+                    <a href="#" class="nav-link">Channels</a>
                 </div>
                 <hr>
-            {% endfor %}
+                <div class="list-group list-group-flush">
+                    {% for group in groups %}
+                        <a href="{% url 'group' group.id %}" class="list-group-item list-group-item-action">{{group.name}}</a>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-    </div>
-    <div>
-        {% if page == 'home' %}
-        <h1>select chat</h1>
-        {% endif %}
-        {% block chat %}
-
-        {% endblock %}
+        <div class="col-md-8 col-lg-9">
+            <div class="p-3">
+                {% if page == 'home' %}
+                    <div class="text-center py-5">
+                        <h1 class="display-4 text-muted">Select a chat</h1>
+                    </div>
+                {% endif %}
+                {% block chat %}
+                {% endblock %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
