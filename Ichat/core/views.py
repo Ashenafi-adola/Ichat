@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from . forms import GroupForm, ChannelForm
+from . forms import GroupForm, ChannelForm, GroupMessageForm
 from . models import Group, FriendMessage, GroupMessage, ChannelMessage, Channel
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
@@ -82,26 +82,42 @@ def group(request, pk):
     users = User.objects.all()
     members = group.members.all()
     
+    form = GroupMessageForm()
     if request.method == "POST":
         if request.POST.get('ok') == 'OK':
             group.members.add(request.user)
             return redirect(f'/group/{pk}')
-        body = request.POST.get("message")
-        message = GroupMessage(
-            owner = request.user,
-            group= group,
-            body= body
-        )
-        message.save()
+        form = GroupMessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.owner = request.user
+            message.group = group
+            message.save()
         return redirect(f'/group/{pk}')
 
     context = {
         'group':group,
         'groups':groups,
+        'form':form,
         'messages':messages,
         'users':users,
         'members': members,
     }
+    return render(request, 'core/group.html', context)
+
+def edit_group_message(request, pk, id):
+    message = GroupMessage.objects.get(id=pk)
+    form = GroupMessageForm(instance=message)
+
+    if request.method == "POST":
+        form = GroupMessageForm(request.POST, instance=message)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/group/{pk}/{id}')
+    context = {
+        'form':form,
+    }
+
     return render(request, 'core/group.html', context)
 
 def friend(request, pk):
@@ -174,3 +190,4 @@ def channel(request, pk):
         'subscribers': subscribers,
     }
     return render(request, 'core/channels.html', context)
+

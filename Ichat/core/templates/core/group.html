@@ -36,7 +36,7 @@
                                 </div>
                                 {% if message.owner == request.user %}
                                 <div class="d-flex gap-2">
-                                    <a href="#" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a href="{% url 'edit_gp_message' message.id group.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
                                     <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
                                 </div>
                                 {% endif %}
@@ -50,7 +50,7 @@
             {% csrf_token %}
             {% if request.user in members %}
             <div class="input-group">
-                <textarea class="form-control" name="message" placeholder="Type your message..." rows="2"></textarea>
+                {{form}}
                 <button type="submit" class="btn btn-primary">Send</button>
             </div>
             {% else %}

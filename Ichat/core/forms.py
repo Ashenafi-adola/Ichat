@@ -1,5 +1,5 @@
-from django.forms import ModelForm
-from .models import Group, Channel
+from django.forms import ModelForm, Textarea, TextInput
+from .models import Group, Channel, GroupMessage, ChannelMessage, FriendMessage
 
 
 class GroupForm(ModelForm):
@@ -11,3 +11,17 @@ class ChannelForm(ModelForm):
     class Meta:
         model = Channel
         fields = ['name', 'description']
+
+class GroupMessageForm(ModelForm):
+    class Meta:
+        model = GroupMessage
+        fields = ['body']
+        widgets = {
+            'body': Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'name': 'message',
+                'data-custom': 'some-value',
+                'placeholder': "Type message here..."
+            }),
+        }
