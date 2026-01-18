@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Group, Message
+from .models import Group
 
 
 class GroupForm(ModelForm):

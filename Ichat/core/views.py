@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from . forms import GroupForm
-from . models import Group, Message
+from . models import Group, FriendMessage, GroupMessage, ChannalMessage
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -74,13 +74,13 @@ def create_group(request):
 def group(request, pk):
     group = Group.objects.get(id=pk)
     groups = Group.objects.all()
-    messages = Message.objects.all()
+    messages = GroupMessage.objects.all()
     users = User.objects.all()
     members = group.members.all()
     
     if request.method == "POST":
         body = request.POST.get("message")
-        message = Message(
+        message = GroupMessage(
             owner = request.user,
             group= group,
             body= body
@@ -97,6 +97,10 @@ def group(request, pk):
     }
     return render(request, 'core/group.html', context)
 
-def create_channel(request):
+def friend(request, pk):
+    friend = User.objects.get(id = pk)
 
-    return render(request, '')
+    context = {
+        'friend':friend,
+    }
+    return render(request, 'core/friends.html', context)
