@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from . forms import GroupForm
-from . models import Group, FriendMessage, GroupMessage, ChannalMessage
+from . forms import GroupForm, ChannelForm
+from . models import Group, FriendMessage, GroupMessage, ChannelMessage, Channel
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -45,9 +45,11 @@ def log_in(request):
 @login_required(login_url='log-in')
 def home(request):
     page = "home"
+    channels = Channel.objects.all()
     groups = Group.objects.all()
     users = User.objects.all()
     context = {
+        'channels':channels,
         'groups':groups,
         'page':page,
         'users':users,
@@ -56,6 +58,7 @@ def home(request):
 
 @login_required(login_url='log-in')
 def create_group(request):
+    page = 'group'
     form = GroupForm()
     if request.method == "POST":
         form = GroupForm(request.POST)
@@ -67,9 +70,9 @@ def create_group(request):
             return redirect(f'/group/{group.id}')
     context = {
         'form' : form,
-
+        'page' : page,
     }
-    return render(request, 'core/create_group.html', context)    
+    return render(request, 'core/create_group_channel.html', context)    
 
 @login_required(login_url='log-in')
 def group(request, pk):
@@ -123,3 +126,51 @@ def friend(request, pk):
         'messages':messages,
     }
     return render(request, 'core/friends.html', context)
+
+def create_channel(request):
+    page = 'channel'
+    form = ChannelForm()
+    if request.method == "POST":
+        form = ChannelForm(request.POST)
+        if form.is_valid():
+            channel = form.save(commit=False)
+            channel.owner = request.user
+            channel.save()
+            channel.subscribers.add(request.user)
+            return redirect(f'/channel/{channel.id}')
+        
+    context = {
+        'form' : form,
+        'page' : page,
+    }
+
+    return render(request, 'core/create_group_channel.html', context)
+
+def channel(request, pk):
+    channel = Channel.objects.get(id=pk)
+    channels = Channel.objects.all()
+    messages = ChannelMessage.objects.all()
+    users = User.objects.all()
+    subscribers = channel.subscribers.all()
+    
+    if request.method == "POST":
+        if request.POST.get('ok') == 'OK':
+            channel.subscribers.add(request.user)
+            return redirect(f'/channel/{pk}')
+        body = request.POST.get("message")
+        message = ChannelMessage(
+            owner = request.user,
+            channel= channel,
+            body= body
+        )
+        message.save()
+        return redirect(f'/channel/{pk}')
+
+    context = {
+        'channel':channel,
+        'channels':channels,
+        'messages':messages,
+        'users':users,
+        'subscribers': subscribers,
+    }
+    return render(request, 'core/channels.html', context)

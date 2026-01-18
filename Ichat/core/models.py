@@ -34,7 +34,7 @@ class GroupMessage(models.Model):
     def __str__(self):
         return self.body[0:30]
     
-class Channal(models.Model):
+class Channel(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=300)
@@ -42,9 +42,9 @@ class Channal(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-class ChannalMessage(models.Model):
+class ChannelMessage(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE, null= True)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null= True)

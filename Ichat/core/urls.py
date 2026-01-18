@@ -7,6 +7,8 @@ urlpatterns = [
     path('logout/', views.log_out, name='logout'),
     path('', views.home, name='home'),
     path('create_group/', views.create_group, name='create_group'),
+    path('create_channel/', views.create_channel, name='create_channel'),
     path('group/<int:pk>/', views.group, name='group'),
-    path('friend/<int:pk>', views.friend, name='friend')
+    path('friend/<int:pk>', views.friend, name='friend'),
+    path('channel/<int:pk>/', views.channel, name='channel')
 ]
