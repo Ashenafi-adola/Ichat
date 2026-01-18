@@ -4,6 +4,7 @@ from . models import Group, Message
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 def sign_up(request):
     page = 'signup'
@@ -61,9 +62,11 @@ def create_group(request):
             group = form.save(commit=False)
             group.owner = request.user
             group.save()
+            group.members.add(request.user)
             return redirect(f'/group/{group.id}')
     context = {
         'form' : form,
+
     }
     return render(request, 'core/create_group.html', context)    
 
@@ -72,7 +75,8 @@ def group(request, pk):
     group = Group.objects.get(id=pk)
     groups = Group.objects.all()
     messages = Message.objects.all()
-    
+    users = User.objects.all()
+    members = group.members.all()
     
     if request.method == "POST":
         body = request.POST.get("message")
@@ -88,6 +92,8 @@ def group(request, pk):
         'group':group,
         'groups':groups,
         'messages':messages,
+        'users':users,
+        'members': members,
     }
     return render(request, 'core/group.html', context)
 
