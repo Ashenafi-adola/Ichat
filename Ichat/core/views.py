@@ -90,3 +90,7 @@ def group(request, pk):
         'messages':messages,
     }
     return render(request, 'core/group.html', context)
+
+def create_channel(request):
+
+    return render(request, '')

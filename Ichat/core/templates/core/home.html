@@ -1,10 +1,10 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-4 col-lg-3 border-end">
-            <div class="p-3">
+<div class="container-fluid vh-100">
+    <div class="row h-100">
+        <div class="col-md-4 col-lg-3 border-end d-flex flex-column">
+            <div class="p-3 flex-grow-1 overflow-auto">
                 <a href="{% url 'create_group' %}" class="btn btn-primary mb-3">Create New Group</a>
                 <h3 class="h5">Chats</h3>
                 <div class="nav flex-column">
@@ -21,10 +21,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8 col-lg-9">
-            <div class="p-3">
+        <div class="col-md-8 col-lg-9 d-flex flex-column">
+            <div class="flex-grow-1 d-flex flex-column">
                 {% if page == 'home' %}
-                    <div class="text-center py-5">
+                    <div class="text-center py-5 flex-grow-1 d-flex align-items-center justify-content-center">
                         <h1 class="display-4 text-muted">Select a chat</h1>
                     </div>
                 {% endif %}
