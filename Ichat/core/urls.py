@@ -8,5 +8,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('create_group/', views.create_group, name='create_group'),
     path('group/<int:pk>/', views.group, name='group'),
-    path('fiend/<int:pk>', views.friend, name='friend')
+    path('friend/<int:pk>', views.friend, name='friend')
 ]

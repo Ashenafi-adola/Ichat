@@ -19,7 +19,9 @@
                         <a href="{% url 'group' group.id %}" class="list-group-item list-group-item-action">{{group.name}}</a>
                     {% endfor %}
                     {% for user in users %}
-                        <a href="{% url 'friend' user.id %}" class="list-group-item list-group-item-action">{{user.username}}</a>
+                        {% if user != request.user %}
+                            <a href="{% url 'friend' user.id %}" class="list-group-item list-group-item-action">{{user.username}}</a>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

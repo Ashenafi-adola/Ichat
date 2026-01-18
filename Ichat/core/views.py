@@ -46,10 +46,11 @@ def log_in(request):
 def home(request):
     page = "home"
     groups = Group.objects.all()
-
+    users = User.objects.all()
     context = {
         'groups':groups,
-        'page':page
+        'page':page,
+        'users':users,
         }
     return render(request, 'core/home.html', context)
 
@@ -79,6 +80,9 @@ def group(request, pk):
     members = group.members.all()
     
     if request.method == "POST":
+        if request.POST.get('ok') == 'OK':
+            group.members.add(request.user)
+            return redirect(f'/group/{pk}')
         body = request.POST.get("message")
         message = GroupMessage(
             owner = request.user,
@@ -99,8 +103,23 @@ def group(request, pk):
 
 def friend(request, pk):
     friend = User.objects.get(id = pk)
+    users = User.objects.all()
+    groups = Group.objects.all()
+    messages = FriendMessage.objects.all()
 
+    if request.method == "POST":
+        body = request.POST.get("message")
+        message = FriendMessage(
+            sender = request.user,
+            reciever = friend,
+            body= body
+        )
+        message.save()
+        return redirect(f'/friend/{pk}')
     context = {
+        'groups':groups,
         'friend':friend,
+        'users':users,
+        'messages':messages,
     }
     return render(request, 'core/friends.html', context)
