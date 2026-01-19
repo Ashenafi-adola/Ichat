@@ -12,4 +12,5 @@ urlpatterns = [
     path('friend/<int:pk>', views.friend, name='friend'),
     path('channel/<int:pk>/', views.channel, name='channel'),
     path('edit_group_message/<int:pk>/<int:id>/', views.edit_group_message, name='edit_gp_message'),
+    path('edit_friend_message/<int:pk>/<int:id>/', views.edit_friend_message, name='edit_fr_message'),
 ]

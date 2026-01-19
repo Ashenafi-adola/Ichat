@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from . forms import GroupForm, ChannelForm, GroupMessageForm
+from . forms import GroupForm, ChannelForm, GroupMessageForm, FriendMessageForm
 from . models import Group, FriendMessage, GroupMessage, ChannelMessage, Channel
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
@@ -106,6 +106,12 @@ def group(request, pk):
     return render(request, 'core/group.html', context)
 
 def edit_group_message(request, pk, id):
+    group = Group.objects.get(id=id)
+    groups = Group.objects.all()
+    messages = GroupMessage.objects.all()
+    users = User.objects.all()
+    members = group.members.all()
+
     message = GroupMessage.objects.get(id=pk)
     form = GroupMessageForm(instance=message)
 
@@ -113,9 +119,14 @@ def edit_group_message(request, pk, id):
         form = GroupMessageForm(request.POST, instance=message)
         if form.is_valid():
             form.save()
-            return redirect(f'/group/{pk}/{id}')
+            return redirect(f'/group/{id}/')
     context = {
+        'group':group,
+        'groups':groups,
         'form':form,
+        'messages':messages,
+        'users':users,
+        'members': members,
     }
 
     return render(request, 'core/group.html', context)
@@ -125,17 +136,39 @@ def friend(request, pk):
     users = User.objects.all()
     groups = Group.objects.all()
     messages = FriendMessage.objects.all()
+    form = FriendMessageForm()
+    if request.method == "POST":
+        form = FriendMessageForm(request.POST)
+        if form.is_valid():
+            message = form(commit=False)
+            message.owner = request.user
+            message.save()
+            return redirect(f'/friend/{pk}')
+    context = {
+        'form':form,
+        'groups':groups,
+        'friend':friend,
+        'users':users,
+        'messages':messages,
+    }
+    return render(request, 'core/friends.html', context)
+
+def edit_friend_message(request, pk, id):
+    friend = User.objects.get(id = id)
+    users = User.objects.all()
+    groups = Group.objects.all()
+    messages = FriendMessage.objects.all()
+
+    message = FriendMessage.objects.get(id=pk)
+    form = FriendMessageForm(instance=message)
 
     if request.method == "POST":
-        body = request.POST.get("message")
-        message = FriendMessage(
-            sender = request.user,
-            reciever = friend,
-            body= body
-        )
-        message.save()
-        return redirect(f'/friend/{pk}')
+        form = FriendMessageForm(request.POST, instance=message)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/friend/{id}')
     context = {
+        'form':form,
         'groups':groups,
         'friend':friend,
         'users':users,
