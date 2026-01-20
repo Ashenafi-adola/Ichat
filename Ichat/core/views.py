@@ -302,9 +302,17 @@ def group_profile(request, pk):
 def channel_profile(request, pk):
     profile = 'channel'
     channel = Channel.objects.get(id=pk)
-    
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
+    subscribers = channel.subscribers.all()
+
     context = {
         'profile':profile,
         'channel':channel,
+        'groups':groups,
+        'channels':channels,
+        'users':users,
+        'subscribers':subscribers,
     }
     return render(request, 'core/profile.html', context)

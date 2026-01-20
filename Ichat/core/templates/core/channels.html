@@ -3,7 +3,7 @@
 {% block chat %}
 <div class="card h-100 border-0">
     <div class="card-header">
-        <img src="{{ channel.profile.url }}" alt="profile" style="width: 60px; height: 60px; border-radius: 30px;">
+        <a href="{% url 'channel_profile' channel.id %}"><img src="{{ channel.profile.url }}" alt="profile" style="width: 60px; height: 60px; border-radius: 30px;"></a>
         <h3 class="card-title mb-1" style="display: inline;">{{channel.name}}</h3><br>
         <small class="text-muted">{{channel.description}}</small>
         <div>

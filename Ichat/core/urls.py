@@ -16,5 +16,5 @@ urlpatterns = [
     path('edit_friend_message/<int:pk>/<int:id>/', views.edit_friend_message, name='edit_fr_message'),
     path('user_profile/', views.user_profile, name="user_profile"),
     path('group_profile/<int:pk>/', views.group_profile, name="group_profile"),
-    path('channel_profile/', views.channel_profile, name="channel_profile"),
+    path('channel_profile/<int:pk>/', views.channel_profile, name="channel_profile"),
 ]
