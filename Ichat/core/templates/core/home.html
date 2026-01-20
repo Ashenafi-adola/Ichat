@@ -8,17 +8,23 @@
                 <a href="{% url 'create_group' %}" class="btn btn-primary mb-3">Create New Group</a>
                 <a href="{% url 'create_channel' %}" class="btn btn-primary mb-3">Create New Channel</a>
                 <h3 class="h5">Chats</h3>
-                <input type="search" name="search" placeholder="Search...">
-                <div class="nav flex-column">
+                <form action="" method="get">
+                    <input type="search" name="q" placeholder="Search Chat..." class="form-control">
+                    <input type="submit" value="Search" >
+                </form><div class="nav flex-column">
                     <a href="#" class="nav-link">All</a>
-                    <a href="#" class="nav-link">Users</a>
+                    <a href="#" class="nav-link">Friends</a>
                     <a href="#" class="nav-link">Groups</a>
                     <a href="#" class="nav-link">Channels</a>
                 </div>
                 <hr>
                 <div class="list-group list-group-flush">
                     {% for group in groups %}
-                        <a href="{% url 'group' group.id %}" class="list-group-item list-group-item-action">{{group.name}}</a>
+                    
+                    <a href="{% url 'group' group.id %}" class="list-group-item list-group-item-action" >
+                        <img src="{{ group.profile.url }}" alt="profile" style="width: 40px; height: 40px; border-radius: 20px;">
+                        {{group.name}}
+                    </a>
                     {% endfor %}
                     {% for channel in channels %}
                         <a href="{% url 'channel' channel.id %}" class="list-group-item list-group-item-action">{{channel.name}}</a>

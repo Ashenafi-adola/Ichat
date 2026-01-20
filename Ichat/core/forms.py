@@ -5,7 +5,7 @@ from .models import Group, Channel, GroupMessage, ChannelMessage, FriendMessage
 class GroupForm(ModelForm):
     class Meta:
         model = Group
-        fields = ['name', 'description']
+        fields = ['name', 'description', 'profile']
 
 class ChannelForm(ModelForm):
     class Meta:

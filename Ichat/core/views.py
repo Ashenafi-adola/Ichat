@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 def sign_up(request):
     page = 'signup'
@@ -45,9 +46,11 @@ def log_in(request):
 @login_required(login_url='log-in')
 def home(request):
     page = "home"
-    channels = Channel.objects.all()
-    groups = Group.objects.all()
-    users = User.objects.all()
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    channels = Channel.objects.filter(Q(name__icontains=q))
+    groups = Group.objects.filter(name__icontains=q)
+    users = User.objects.filter(username__icontains=q)
     context = {
         'channels':channels,
         'groups':groups,
@@ -61,7 +64,7 @@ def create_group(request):
     page = 'group'
     form = GroupForm()
     if request.method == "POST":
-        form = GroupForm(request.POST)
+        form = GroupForm(request.POST, request.FILES)
         if form.is_valid():
             group = form.save(commit=False)
             group.owner = request.user
@@ -77,9 +80,17 @@ def create_group(request):
 @login_required(login_url='log-in')
 def group(request, pk):
     group = Group.objects.get(id=pk)
-    groups = Group.objects.all()
-    messages = GroupMessage.objects.all()
-    users = User.objects.all()
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    p = request.GET.get('p') if request.GET.get('p') != None else ''
+    channels = Channel.objects.filter(Q(name__icontains=q))
+    groups = Group.objects.filter(name__icontains=q)
+    users = User.objects.filter(username__icontains=q)
+
+    messages = GroupMessage.objects.filter(
+        Q(body__icontains = p)
+    )
+    
     members = group.members.all()
     
     form = GroupMessageForm()
@@ -102,6 +113,7 @@ def group(request, pk):
         'messages':messages,
         'users':users,
         'members': members,
+        'channels':channels
     }
     return render(request, 'core/group.html', context)
 
@@ -133,15 +145,20 @@ def edit_group_message(request, pk, id):
 
 def friend(request, pk):
     friend = User.objects.get(id = pk)
-    users = User.objects.all()
-    groups = Group.objects.all()
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    channels = Channel.objects.filter(Q(name__icontains=q))
+    groups = Group.objects.filter(name__icontains=q)
+    users = User.objects.filter(username__icontains=q)
+
     messages = FriendMessage.objects.all()
     form = FriendMessageForm()
     if request.method == "POST":
         form = FriendMessageForm(request.POST)
         if form.is_valid():
-            message = form(commit=False)
-            message.owner = request.user
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.reciever = friend
             message.save()
             return redirect(f'/friend/{pk}')
     context = {
@@ -150,6 +167,7 @@ def friend(request, pk):
         'friend':friend,
         'users':users,
         'messages':messages,
+        'channels':channels,
     }
     return render(request, 'core/friends.html', context)
 

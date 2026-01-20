@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class Group(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    profile = models.ImageField(upload_to='profiles/group/',null=True, blank=True)
     description = models.CharField(max_length=300)
     members = models.ManyToManyField(User, related_name="member")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -36,6 +37,7 @@ class GroupMessage(models.Model):
     
 class Channel(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ImageField(upload_to='profiles/channel/',null=True, blank=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=300)
     subscribers = models.ManyToManyField(User, related_name="subscribers")
