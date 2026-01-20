@@ -198,7 +198,7 @@ def create_channel(request):
     page = 'channel'
     form = ChannelForm()
     if request.method == "POST":
-        form = ChannelForm(request.POST)
+        form = ChannelForm(request.POST, request.FILES)
         if form.is_valid():
             channel = form.save(commit=False)
             channel.owner = request.user

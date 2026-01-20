@@ -10,7 +10,7 @@ class GroupForm(ModelForm):
 class ChannelForm(ModelForm):
     class Meta:
         model = Channel
-        fields = ['name', 'description']
+        fields = ['name', 'description','profile']
 
 class GroupMessageForm(ModelForm):
     class Meta:
