@@ -271,13 +271,24 @@ def edit_channel_message(request, pk, id):
 
     return render(request, 'core/channels.html', context)
 
+def deleta_channel_message(request, pk):
+
+
+    return
+
 def user_profile(request, pk):
     profile = 'user'
     user = User.objects.get(id=pk)
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
 
     context = {
         'profile':profile,
         'user':user,
+        'groups':groups,
+        'channels':channels,
+        'users':users,
     }
     return render(request, 'core/profile.html', context)
 
