@@ -13,6 +13,7 @@ urlpatterns = [
     path('channel/<int:pk>/', views.channel, name='channel'),
     path('edit_group_message/<int:pk>/<int:id>/', views.edit_group_message, name='edit_gp_message'),
     path('edit_channel_message/<int:pk>/<int:id>/', views.edit_channel_message, name='edit_ch_message'),
+    path('delete_channel_message/<int:pk>/', views.deleta_channel_message, name='delete_ch_message'),
     path('edit_friend_message/<int:pk>/<int:id>/', views.edit_friend_message, name='edit_fr_message'),
     path('user_profile/<int:pk>', views.user_profile, name="user_profile"),
     path('group_profile/<int:pk>/', views.group_profile, name="group_profile"),

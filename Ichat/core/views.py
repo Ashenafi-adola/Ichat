@@ -251,7 +251,7 @@ def edit_channel_message(request, pk, id):
     messages = ChannelMessage.objects.all()
     users = User.objects.all()
     subscribers = channel.subscribers.all()
-
+    groups = Group.objects.all()
     message = ChannelMessage.objects.get(id=pk)
     form = ChannelMessageForm(instance=message)
 
@@ -263,6 +263,7 @@ def edit_channel_message(request, pk, id):
     context = {
         'channel':channel,
         'channels':channels,
+        'groups':groups,
         'form':form,
         'messages':messages,
         'users':users,
@@ -272,9 +273,23 @@ def edit_channel_message(request, pk, id):
     return render(request, 'core/channels.html', context)
 
 def deleta_channel_message(request, pk):
+    message = ChannelMessage.objects.get(id=pk)
+    channel = message.channel
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
 
+    if request.method == 'POST':
+        message.delete()
+        return redirect(f'/channel/{channel.id}/')
+    context = {
+        'message':message,
+        'channels':channels,
+        'users':users,
+        'groups':groups,
 
-    return
+    }
+    return render(request, 'core/delete_message.html', context)
 
 def user_profile(request, pk):
     profile = 'user'
