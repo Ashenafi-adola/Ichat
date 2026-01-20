@@ -3,7 +3,7 @@
 {% block chat %}
 <div class="card h-100 border-0">
     <div class="card-header">
-        <img src="{{ group.profile.url }}" alt="profile" style="width: 60px; height: 60px; border-radius: 30px;">
+        <a href="{% url 'group_profile' group.id %}"><img src="{{ group.profile.url }}" alt="profile" style="width: 60px; height: 60px; border-radius: 30px;"></a>
         <h3 class="card-title mb-1" style="display: inline-block;">{{group.name}}</h3><br>
         <small class="text-muted">{{group.description}}</small>
         <div>
@@ -25,6 +25,9 @@
                                         {% if message.owner == request.user %}
                                             <strong class="text-primary">You</strong>
                                         {% else %}
+                                            <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 25px; height: 25px; font-weight: bold; display: inline-block;">
+                                                {{ message.owner.username|first|upper }}
+                                            </div>
                                             <strong class="text-dark">@{{message.owner}}</strong>
                                         {% endif %}
                                     </div>

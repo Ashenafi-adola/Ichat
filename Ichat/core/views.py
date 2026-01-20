@@ -270,3 +270,41 @@ def edit_channel_message(request, pk, id):
     }
 
     return render(request, 'core/channels.html', context)
+
+def user_profile(request, pk):
+    profile = 'user'
+    user = User.objects.get(id=pk)
+
+    context = {
+        'profile':profile,
+        'user':user,
+    }
+    return render(request, 'core/profile.html', context)
+
+def group_profile(request, pk):
+    profile = 'group'
+    group = Group.objects.get(id=pk)
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
+    members = group.members.all()
+    
+    context = {
+        'profile':profile,
+        'group':group,
+        'groups':groups,
+        'channels':channels,
+        'users':users,
+        'members':members,
+    }
+    return render(request, 'core/profile.html', context)
+
+def channel_profile(request, pk):
+    profile = 'channel'
+    channel = Channel.objects.get(id=pk)
+    
+    context = {
+        'profile':profile,
+        'channel':channel,
+    }
+    return render(request, 'core/profile.html', context)

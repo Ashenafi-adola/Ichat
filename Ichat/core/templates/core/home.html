@@ -34,7 +34,12 @@
                     {% endfor %}
                     {% for user in users %}
                         {% if user != request.user %}
-                            <a href="{% url 'friend' user.id %}" class="list-group-item list-group-item-action">{{user.username}}</a>
+                            <a href="{% url 'friend' user.id %}" class="list-group-item list-group-item-action">
+                                <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold; display: inline-block;">
+                                    {{ user.username|first|upper }}
+                                </div>
+                                <div style="display: inline;">{{user.username}}</div>
+                            </a>
                         {% endif %}
                     {% endfor %}
                 </div>
