@@ -25,6 +25,21 @@ class GroupMessageForm(ModelForm):
                 'placeholder': "Type message here..."
             }),
         }
+
+class ChannelMessageForm(ModelForm):
+    class Meta:
+        model = ChannelMessage
+        fields = ['body']
+        widgets = {
+            'body': Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'name': 'message',
+                'data-custom': 'some-value',
+                'placeholder': "Type message here..."
+            }),
+        }
+
 class FriendMessageForm(ModelForm):
     class Meta:
         model = FriendMessage

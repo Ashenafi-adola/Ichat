@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from . forms import GroupForm, ChannelForm, GroupMessageForm, FriendMessageForm
+from . forms import GroupForm, ChannelForm, GroupMessageForm, FriendMessageForm, ChannelMessageForm
 from . models import Group, FriendMessage, GroupMessage, ChannelMessage, Channel
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
@@ -218,27 +218,55 @@ def channel(request, pk):
     channels = Channel.objects.all()
     messages = ChannelMessage.objects.all()
     users = User.objects.all()
+    groups = Group.objects.all()
     subscribers = channel.subscribers.all()
-    
+    form = ChannelMessageForm()
+
     if request.method == "POST":
         if request.POST.get('ok') == 'OK':
             channel.subscribers.add(request.user)
             return redirect(f'/channel/{pk}')
-        body = request.POST.get("message")
-        message = ChannelMessage(
-            owner = request.user,
-            channel= channel,
-            body= body
-        )
-        message.save()
-        return redirect(f'/channel/{pk}')
+        form = ChannelMessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.owner = request.user
+            message.channel = channel
+            message.save()
+            return redirect(f'/channel/{pk}')
 
     context = {
         'channel':channel,
         'channels':channels,
         'messages':messages,
         'users':users,
+        'groups':groups,
         'subscribers': subscribers,
+        'form':form,
     }
     return render(request, 'core/channels.html', context)
 
+def edit_channel_message(request, pk, id):
+    channel = Channel.objects.get(id=id)
+    channels = Channel.objects.all()
+    messages = ChannelMessage.objects.all()
+    users = User.objects.all()
+    subscribers = channel.subscribers.all()
+
+    message = ChannelMessage.objects.get(id=pk)
+    form = ChannelMessageForm(instance=message)
+
+    if request.method == "POST":
+        form = ChannelMessageForm(request.POST, instance=message)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/channel/{id}/')
+    context = {
+        'channel':channel,
+        'channels':channels,
+        'form':form,
+        'messages':messages,
+        'users':users,
+        'subscribers': subscribers,
+    }
+
+    return render(request, 'core/channels.html', context)
