@@ -37,7 +37,7 @@
                                 </div>
                                 {% if message.owner == request.user %}
                                 <div class="d-flex gap-2">
-                                    <a href="{% url 'edit_ch_message' message.id channel.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a href="{% url 'edit_ch_message' message.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
                                     <a href="{% url 'delete_ch_message' message.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
                                 </div>
                                 {% endif %}

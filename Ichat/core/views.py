@@ -117,21 +117,22 @@ def group(request, pk):
     }
     return render(request, 'core/group.html', context)
 
-def edit_group_message(request, pk, id):
-    group = Group.objects.get(id=id)
+def edit_group_message(request, pk):
     groups = Group.objects.all()
     messages = GroupMessage.objects.all()
     users = User.objects.all()
-    members = group.members.all()
-
     message = GroupMessage.objects.get(id=pk)
+    group = message.group
+    members = group.members.all()
+    channels = Channel.objects.all()
+
     form = GroupMessageForm(instance=message)
 
     if request.method == "POST":
         form = GroupMessageForm(request.POST, instance=message)
         if form.is_valid():
             form.save()
-            return redirect(f'/group/{id}/')
+            return redirect(f'/group/{group.id}/')
     context = {
         'group':group,
         'groups':groups,
@@ -139,9 +140,30 @@ def edit_group_message(request, pk, id):
         'messages':messages,
         'users':users,
         'members': members,
+        'channels': channels
     }
 
     return render(request, 'core/group.html', context)
+
+def delete_group_message(request, pk):
+    message = GroupMessage.objects.get(id=pk)
+    group = message.group
+    groups = Group.objects.all()
+    users = User.objects.all()
+    channels = Channel.objects.all()
+
+
+    if request.method == "POST":
+        message.delete()
+        return redirect(f'/group/{group.id}')
+    context = {
+        'message':message,
+        'group':group,
+        'groups':groups,
+        'users':users,
+        'channels': channels
+    }
+    return  render(request, 'core/delete_message.html', context)
 
 def friend(request, pk):
     friend = User.objects.get(id = pk)
@@ -171,20 +193,20 @@ def friend(request, pk):
     }
     return render(request, 'core/friends.html', context)
 
-def edit_friend_message(request, pk, id):
-    friend = User.objects.get(id = id)
+def edit_friend_message(request, pk):
     users = User.objects.all()
     groups = Group.objects.all()
     messages = FriendMessage.objects.all()
 
     message = FriendMessage.objects.get(id=pk)
+    friend = message.reciever
     form = FriendMessageForm(instance=message)
 
     if request.method == "POST":
         form = FriendMessageForm(request.POST, instance=message)
         if form.is_valid():
             form.save()
-            return redirect(f'/friend/{id}')
+            return redirect(f'/friend/{friend.id}')
     context = {
         'form':form,
         'groups':groups,
@@ -245,21 +267,21 @@ def channel(request, pk):
     }
     return render(request, 'core/channels.html', context)
 
-def edit_channel_message(request, pk, id):
-    channel = Channel.objects.get(id=id)
+def edit_channel_message(request, pk):
     channels = Channel.objects.all()
     messages = ChannelMessage.objects.all()
     users = User.objects.all()
-    subscribers = channel.subscribers.all()
     groups = Group.objects.all()
     message = ChannelMessage.objects.get(id=pk)
+    channel = message.channel
+    subscribers = channel.subscribers.all()
     form = ChannelMessageForm(instance=message)
 
     if request.method == "POST":
         form = ChannelMessageForm(request.POST, instance=message)
         if form.is_valid():
             form.save()
-            return redirect(f'/channel/{id}/')
+            return redirect(f'/channel/{channel.id}/')
     context = {
         'channel':channel,
         'channels':channels,
@@ -272,7 +294,7 @@ def edit_channel_message(request, pk, id):
 
     return render(request, 'core/channels.html', context)
 
-def deleta_channel_message(request, pk):
+def delete_channel_message(request, pk):
     message = ChannelMessage.objects.get(id=pk)
     channel = message.channel
     channels = Channel.objects.all()
