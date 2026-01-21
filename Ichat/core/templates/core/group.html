@@ -25,10 +25,16 @@
                                         {% if message.owner == request.user %}
                                             <strong class="text-primary">You</strong>
                                         {% else %}
-                                            <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 25px; height: 25px; font-weight: bold; display: inline-block;">
-                                                {{ message.owner.username|first|upper }}
+                                            <div class="d-flex align-items-center">
+                                                <a href="{% url 'user_profile' message.owner.id %}" class="text-decoration-none">
+                                                    <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                                        style="width: 25px; height: 25px; font-weight: bold; font-size: 18px;">
+                                                        {{ message.owner.username|first|upper }}
+                                                    </div>
+                                                </a>
+                                            
+                                                <strong class="card-title mb-0">{{ message.owner.username }}</strong>
                                             </div>
-                                            <strong class="text-dark">@{{message.owner}}</strong>
                                         {% endif %}
                                     </div>
                                     <div>

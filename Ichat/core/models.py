@@ -54,3 +54,13 @@ class ChannelMessage(models.Model):
 
     def __str__(self):
         return self.body[0:30]
+
+class ChannelMessageComment(models.Model):
+    channelmessage = models.ForeignKey(ChannelMessage, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.body[:20]

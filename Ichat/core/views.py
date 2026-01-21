@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from . forms import GroupForm, ChannelForm, GroupMessageForm, FriendMessageForm, ChannelMessageForm
-from . models import Group, FriendMessage, GroupMessage, ChannelMessage, Channel
+from . forms import GroupForm, ChannelForm, GroupMessageForm, FriendMessageForm, ChannelMessageForm, CommentForm
+from . models import Group, FriendMessage, GroupMessage, ChannelMessage, Channel, ChannelMessageComment
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -216,6 +216,25 @@ def edit_friend_message(request, pk):
     }
     return render(request, 'core/friends.html', context)
 
+def delete_friend_message(request, pk):
+    message = FriendMessage.objects.get(id=pk)
+    friend = message.reciever
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
+
+    if request.method == 'POST':
+        message.delete()
+        return redirect(f'/friend/{friend.id}/')
+    context = {
+        'message':message,
+        'channels':channels,
+        'users':users,
+        'groups':groups,
+
+    }
+    return render(request, 'core/delete_message.html', context)
+
 def create_channel(request):
     page = 'channel'
     form = ChannelForm()
@@ -312,6 +331,34 @@ def delete_channel_message(request, pk):
 
     }
     return render(request, 'core/delete_message.html', context)
+
+def leave_comment(request, pk):
+    message = ChannelMessage.objects.get(id=pk)
+    channel = message.channel
+    comments = ChannelMessageComment.objects.all().filter(channelmessage=message)
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
+    form = CommentForm()
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.owner = request.user
+            comment.channelmessage = message
+            comment.save()
+            return redirect(f'/comment/{pk}')
+    
+    context = {
+        'comments':comments,
+        'channel':channel,
+        'message':message,
+        'channels':channels,
+        'users':users,
+        'groups':groups,
+        'form':form,
+    }
+    return render(request, 'core/comments.html', context)
 
 def user_profile(request, pk):
     profile = 'user'
