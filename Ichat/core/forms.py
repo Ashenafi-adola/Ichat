@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Textarea, TextInput
+from django.forms import ModelForm, Textarea, TextInput,FileField
 from .models import Group, Channel, GroupMessage, ChannelMessage, FriendMessage, ChannelMessageComment
 
 
@@ -29,7 +29,7 @@ class GroupMessageForm(ModelForm):
 class ChannelMessageForm(ModelForm):
     class Meta:
         model = ChannelMessage
-        fields = ['body']
+        fields = ['body', 'shared_media']
         widgets = {
             'body': Textarea(attrs={
                 'class': 'form-control',

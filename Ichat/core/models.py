@@ -47,7 +47,8 @@ class Channel(models.Model):
 class ChannelMessage(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE, null= True)
-    body = models.TextField()
+    shared_media = models.ImageField(upload_to='shared_media/channel/', null=True, blank=True)
+    body = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null= True)
 
