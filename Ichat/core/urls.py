@@ -29,4 +29,5 @@ urlpatterns = [
     path('channel_profile/<int:pk>/', views.channel_profile, name="channel_profile"),
     # Commenting
     path('comment/<int:pk>/', views.leave_comment, name='comment'),
+    path('shared_media/<int:pk>/', views.view_media, name='show_media'),
 ]

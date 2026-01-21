@@ -323,8 +323,9 @@ def delete_channel_message(request, pk):
     users = User.objects.all()
     groups = Group.objects.all()
 
-    if request.method == 'POST':
+    if request.method == 'POST': 
         os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
+        
         message.delete()
         return redirect(f'/channel/{channel.id}/')
     context = {
@@ -415,3 +416,16 @@ def channel_profile(request, pk):
         'subscribers':subscribers,
     }
     return render(request, 'core/profile.html', context)
+
+def view_media(request, pk):
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
+    message = GroupMessage.objects.get(id=pk)
+    context = {
+        'groups':groups,
+        'channels':channels,
+        'users':users,
+        'message':message,
+    }
+    return render(request, 'core/display_media.html', context)
