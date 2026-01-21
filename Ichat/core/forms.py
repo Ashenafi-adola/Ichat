@@ -15,7 +15,7 @@ class ChannelForm(ModelForm):
 class GroupMessageForm(ModelForm):
     class Meta:
         model = GroupMessage
-        fields = ['body']
+        fields = ['body', 'shared_media']
         widgets = {
             'body': Textarea(attrs={
                 'class': 'form-control',
@@ -43,7 +43,7 @@ class ChannelMessageForm(ModelForm):
 class FriendMessageForm(ModelForm):
     class Meta:
         model = FriendMessage
-        fields = ['body']
+        fields = ['body', 'shared_media']
         widgets = {
             'body': Textarea(attrs={
                 'class': 'form-control',
@@ -57,7 +57,7 @@ class FriendMessageForm(ModelForm):
 class CommentForm(ModelForm):
     class Meta:
         model = ChannelMessageComment
-        fields = ['body']
+        fields = ['body', 'shared_media']
         widgets = {
             'body': Textarea(attrs={
                 'class': 'form-control',

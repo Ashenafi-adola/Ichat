@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
+import os
 
 def sign_up(request):
     page = 'signup'
@@ -98,7 +99,7 @@ def group(request, pk):
         if request.POST.get('ok') == 'OK':
             group.members.add(request.user)
             return redirect(f'/group/{pk}')
-        form = GroupMessageForm(request.POST)
+        form = GroupMessageForm(request.POST, request.FILES)
         if form.is_valid():
             message = form.save(commit=False)
             message.owner = request.user
@@ -154,6 +155,7 @@ def delete_group_message(request, pk):
 
 
     if request.method == "POST":
+        os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
         message.delete()
         return redirect(f'/group/{group.id}')
     context = {
@@ -176,7 +178,7 @@ def friend(request, pk):
     messages = FriendMessage.objects.all()
     form = FriendMessageForm()
     if request.method == "POST":
-        form = FriendMessageForm(request.POST)
+        form = FriendMessageForm(request.POST, request.FILES)
         if form.is_valid():
             message = form.save(commit=False)
             message.sender = request.user
@@ -224,6 +226,7 @@ def delete_friend_message(request, pk):
     groups = Group.objects.all()
 
     if request.method == 'POST':
+        os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
         message.delete()
         return redirect(f'/friend/{friend.id}/')
     context = {
@@ -321,6 +324,7 @@ def delete_channel_message(request, pk):
     groups = Group.objects.all()
 
     if request.method == 'POST':
+        os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
         message.delete()
         return redirect(f'/channel/{channel.id}/')
     context = {

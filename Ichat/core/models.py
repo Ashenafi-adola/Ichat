@@ -17,6 +17,7 @@ class Group(models.Model):
 class FriendMessage(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     reciever = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='reciever', null=True)
+    shared_media = models.ImageField(upload_to='shared_media/friend/', null=True, blank=True)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -27,6 +28,7 @@ class FriendMessage(models.Model):
 class GroupMessage(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    shared_media = models.ImageField(upload_to='shared_media/group/', null=True, blank=True)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null= True)
@@ -59,6 +61,7 @@ class ChannelMessage(models.Model):
 class ChannelMessageComment(models.Model):
     channelmessage = models.ForeignKey(ChannelMessage, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    shared_media = models.ImageField(upload_to='shared_media/comments/', null=True, blank=True)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
