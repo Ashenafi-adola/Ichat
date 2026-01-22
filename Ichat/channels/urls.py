@@ -9,6 +9,8 @@ urlpatterns = [
     path('edit_channel_message/<int:pk>/', views.edit_channel_message, name='edit_ch_message'),
     # Deleting pages
     path('delete_channel_message/<int:pk>/', views.delete_channel_message, name='delete_ch_message'),
+    path('delete_channel/<int:pk>/', views.delete_channel, name='delete_ch'),
+
     path('channel_profile/<int:pk>/', views.channel_profile, name="channel_profile"),
     # Commenting
     path('comment/<int:pk>/', views.leave_comment, name='comment'),

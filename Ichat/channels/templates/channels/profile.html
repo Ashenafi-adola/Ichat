@@ -13,6 +13,11 @@
                         <h2 class="card-title mb-2">{{ channel.name }}</h2>
                         <span class="badge bg-primary fs-6 mb-3">{{ channel.subscribers.count }} subscriber{{ channel.subscribers.count|pluralize }}</span>
                         <p class="card-text text-muted">{{ channel.description }}</p>
+                        {% if request.user == channel.owner %}
+                            <div>
+                                <a href="{% url 'delete_ch' channel.id %}" class="btn btn-sm btn-outline-danger">Delete Group</a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 

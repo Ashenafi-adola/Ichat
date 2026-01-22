@@ -44,14 +44,14 @@ def group(request, pk):
     if request.method == "POST":
         if request.POST.get('ok') == 'OK':
             group.members.add(request.user)
-            return redirect(f'groups/group/{pk}')
+            return redirect(f'group/group/{pk}')
         form = GroupMessageForm(request.POST, request.FILES)
         if form.is_valid():
             message = form.save(commit=False)
             message.owner = request.user
             message.group = group
             message.save()
-        return redirect(f'/group/{pk}')
+        return redirect(f'/group/group/{pk}')
 
     context = {
         'group':group,
@@ -79,7 +79,7 @@ def edit_group_message(request, pk):
         form = GroupMessageForm(request.POST, instance=message)
         if form.is_valid():
             form.save()
-            return redirect(f'/group/{group.id}/')
+            return redirect(f'group/group/{group.id}/')
     context = {
         'group':group,
         'groups':groups,
@@ -93,6 +93,7 @@ def edit_group_message(request, pk):
     return render(request, 'groups/group.html', context)
 
 def delete_group_message(request, pk):
+    delete = 'message'
     message = GroupMessage.objects.get(id=pk)
     group = message.group
     groups = Group.objects.all()
@@ -106,15 +107,16 @@ def delete_group_message(request, pk):
         except ValueError:
             print("no file associated with it")
         message.delete()
-        return redirect(f'/group/{group.id}')
+        return redirect(f'group/group/{group.id}')
     context = {
         'message':message,
         'group':group,
         'groups':groups,
         'users':users,
-        'channels': channels
+        'channels': channels,
+        'delete': delete,
     }
-    return  render(request, 'groups/delete_message.html', context)
+    return  render(request, 'groups/delete_page.html', context)
 
 def group_profile(request, pk):
     profile = 'group'
@@ -149,3 +151,30 @@ def view_group_media(request, pk):
         'message':message,
     }
     return render(request, 'groups/display_media.html', context)
+
+def delete_group(request,pk):
+    delete = 'group'
+    group = Group.objects.get(id=pk)
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
+    messages = GroupMessage.objects.filter(group=group)
+
+    if request.method == "POST":
+        for message in messages:
+            try:
+                os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
+            except ValueError:
+                print("no file associated with it")
+            message.delete()
+        group.delete()
+        return redirect('home')
+
+    context = {
+        'group':group,
+        'delete':delete,
+        'groups':groups,
+        'channels':channels,
+        'users':users,
+    }
+    return render(request, 'groups/delete_page.html', context)

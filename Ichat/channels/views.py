@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.views.generic import TemplateView
 import os
 
 
@@ -18,7 +19,7 @@ def create_channel(request):
             channel.owner = request.user
             channel.save()
             channel.subscribers.add(request.user)
-            return redirect(f'/channel/{channel.id}')
+            return redirect(f'/channel/channel/{channel.id}')
         
     context = {
         'form' : form,
@@ -45,7 +46,7 @@ def channel(request, pk):
             message.owner = request.user
             message.channel = channel
             message.save()
-            return redirect(f'/channel/{pk}')
+            return redirect(f'/channel/channel/{pk}')
 
     context = {
         'channel':channel,
@@ -72,7 +73,7 @@ def edit_channel_message(request, pk):
         form = ChannelMessageForm(request.POST, instance=message)
         if form.is_valid():
             form.save()
-            return redirect(f'/channel/{channel.id}/')
+            return redirect(f'/channel/channel/{channel.id}/')
     context = {
         'channel':channel,
         'channels':channels,
@@ -86,6 +87,7 @@ def edit_channel_message(request, pk):
     return render(request, 'channels/channels.html', context)
 
 def delete_channel_message(request, pk):
+    delete = 'delete'
     message = ChannelMessage.objects.get(id=pk)
     channel = message.channel
     channels = Channel.objects.all()
@@ -98,15 +100,15 @@ def delete_channel_message(request, pk):
         except ValueError:
             print("no file associated with it")
         message.delete()
-        return redirect(f'/channel/{channel.id}/')
+        return redirect(f'/channel/channel/{channel.id}/')
     context = {
         'message':message,
         'channels':channels,
         'users':users,
         'groups':groups,
-
+        'delete': delete,
     }
-    return render(request, 'channels/delete_message.html', context)
+    return render(request, 'channels/delete_page.html', context)
 
 def leave_comment(request, pk):
     message = ChannelMessage.objects.get(id=pk)
@@ -123,7 +125,7 @@ def leave_comment(request, pk):
             comment.owner = request.user
             comment.channelmessage = message
             comment.save()
-            return redirect(f'/comment/{pk}')
+            return redirect(f'/channel/comment/{pk}')
     
     context = {
         'comments':comments,
@@ -152,7 +154,7 @@ def edit_comment(request, pk, id):
             comment.owner = request.user
             comment.channelmessage = message
             comment.save()
-            return redirect(f'/comment/{pk}')
+            return redirect(f'/channel/comment/{pk}')
     
     context = {
         'comments':comments,
@@ -166,6 +168,7 @@ def edit_comment(request, pk, id):
     return render(request, 'channels/comments.html', context)
 
 def delete_comment(request, pk):
+    delete = 'comment'
     comment = ChannelMessageComment.objects.get(id=pk)
     message = comment.channelmessage
     channels = Channel.objects.all()
@@ -178,15 +181,15 @@ def delete_comment(request, pk):
         except ValueError:
             print("no file associated with it")
         comment.delete()
-        return redirect(f'/comment/{message.id}/')
+        return redirect(f'/channel/comment/{message.id}/')
     context = {
         'message':comment,
         'channels':channels,
         'users':users,
         'groups':groups,
-
+        'delete':delete,
     }
-    return render(request, 'channels/delete_message.html', context)
+    return render(request, 'channels/delete_page.html', context)
 
 def channel_profile(request, pk):
     profile = 'channel'
@@ -220,3 +223,30 @@ def view_channel_media(request, pk):
         'message':message,
     }
     return render(request, 'channels/display_media.html', context)
+
+def delete_channel(request,pk):
+    delete = 'channel'
+    channel = Channel.objects.get(id=pk)
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
+    messages = ChannelMessage.objects.filter(channel=channel)
+
+    if request.method == "POST":
+        for message in messages:
+            try:
+                os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
+            except ValueError:
+                print("no file associated with it")
+            message.delete()
+        channel.delete()
+        return redirect('home')
+
+    context = {
+        'channel':channel,
+        'delete':delete,
+        'groups':groups,
+        'channels':channels,
+        'users':users,
+    }
+    return render(request, 'channels/delete_page.html', context)

@@ -6,12 +6,18 @@
             <div class="col-lg-8">
                 <!-- Group Profile Card -->
                 <h1 class="card-title mb-2"><a href="{{request.META.HTTP_REFERER}}">⬅️</a> Profile</h1>
+                
                 <div class="card shadow mb-4">
                     <div class="card-body text-center">
                         <img src="{{ group.profile.url }}" alt="Group Profile" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #e9ecef;">
                         <h2 class="card-title mb-2">{{ group.name }}</h2>
                         <span class="badge bg-primary fs-6 mb-3">{{ group.members.count }} member{{ group.members.count|pluralize }}</span>
                         <p class="card-text text-muted">{{ group.description }}</p>
+                        {% if request.user == group.owner %}
+                            <div>
+                                <a href="{% url 'delete_gp' group.id %}" class="btn btn-sm btn-outline-danger">Delete Group</a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 

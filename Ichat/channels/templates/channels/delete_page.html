@@ -1,4 +1,4 @@
-{% extends 'groups/home.html' %}
+{% extends 'channels/home.html' %}
 
 {% block chat %}
 <div class="d-flex justify-content-center align-items-center vh-100">
@@ -10,7 +10,13 @@
             <form action="" method="post">
                 {% csrf_token %}
                 <div class="alert alert-warning" role="alert">
-                    <strong>Warning!</strong> Are you sure you want to delete the message: "<em>{{message.body}}</em>"?
+                    {% if delete == 'message' %}
+                        <strong>Warning!</strong> Are you sure you want to delete the message: "<em>{{message.body}}</em>"?
+                    {% elif delete == 'comment' %}
+                        <strong>Warning!</strong> Are you sure you want to delete the comment: "<em>{{comment.body}}</em>"?
+                    {% else %}
+                        <strong>Warning!</strong> Are you sure you want to delete the channel: "<em>{{channel.name}}</em>"?
+                    {% endif %}
                 </div>
                 <div class="d-flex justify-content-end gap-2">
                     <a href="{{request.META.HTTP_REFERER}}" class="btn btn-secondary">Cancel</a>
