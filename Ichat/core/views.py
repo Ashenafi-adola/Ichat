@@ -155,7 +155,10 @@ def delete_group_message(request, pk):
 
 
     if request.method == "POST":
-        os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
+        try:
+            os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
+        except ValueError:
+            print("no file associated with it")
         message.delete()
         return redirect(f'/group/{group.id}')
     context = {
@@ -226,7 +229,10 @@ def delete_friend_message(request, pk):
     groups = Group.objects.all()
 
     if request.method == 'POST':
-        os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
+        try:
+            os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
+        except ValueError:
+            print("no file associated with it")        
         message.delete()
         return redirect(f'/friend/{friend.id}/')
     context = {
@@ -324,8 +330,10 @@ def delete_channel_message(request, pk):
     groups = Group.objects.all()
 
     if request.method == 'POST': 
-        os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
-        
+        try:
+            os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
+        except ValueError:
+            print("no file associated with it")
         message.delete()
         return redirect(f'/channel/{channel.id}/')
     context = {
