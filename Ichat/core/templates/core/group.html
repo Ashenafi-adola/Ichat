@@ -5,6 +5,10 @@
     <div class="card-header">
         <a href="{% url 'group_profile' group.id %}"><img src="{{ group.profile.url }}" alt="profile" style="width: 60px; height: 60px; border-radius: 30px;"></a>
         <h3 class="card-title mb-1" style="display: inline-block;">{{group.name}}</h3><br>
+        <form action="" method="get">
+            <input type="search" name="q" placeholder="Search Message..." class="form-control">
+            <input type="submit" value="Search" >
+        </form>
         <small class="text-muted">{{group.description}}</small>
         <div>
             <p>{{group.members.count}} members</p>
