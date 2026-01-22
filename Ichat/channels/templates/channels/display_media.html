@@ -1,0 +1,14 @@
+{% extends 'channels/home.html' %}
+
+{% block chat %}
+<div>
+    <div class="mb-2">
+        <div class="card">
+            <div class="card-body p-3">
+                <h1 class="card-title mb-2"><a href="{{request.META.HTTP_REFERER}}">⬅️Back</a> </h1>
+                <img src="{{ message.shared_media.url }}" alt="" style="max-height: 100%; max-width: 100%;">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
