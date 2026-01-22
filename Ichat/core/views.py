@@ -234,7 +234,7 @@ def delete_friend_message(request, pk):
         except ValueError:
             print("no file associated with it")        
         message.delete()
-        return redirect(f'/friend/{friend.id}/')
+        return redirect(f'/friend/{friend.id}')
     context = {
         'message':message,
         'channels':channels,
@@ -348,7 +348,7 @@ def delete_channel_message(request, pk):
 def leave_comment(request, pk):
     message = ChannelMessage.objects.get(id=pk)
     channel = message.channel
-    comments = ChannelMessageComment.objects.all().filter(channelmessage=message)
+    comments = ChannelMessageComment.objects.filter(channelmessage=message)
     channels = Channel.objects.all()
     users = User.objects.all()
     groups = Group.objects.all()
@@ -373,12 +373,65 @@ def leave_comment(request, pk):
     }
     return render(request, 'core/comments.html', context)
 
+def edit_comment(request, pk, id):
+    message = ChannelMessage.objects.get(id=pk)
+    channel = message.channel
+    comments = ChannelMessageComment.objects.filter(channelmessage=message)
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    comment = ChannelMessageComment.objects.get(id=id)
+    groups = Group.objects.all()
+    form = CommentForm(instance=comment)
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.owner = request.user
+            comment.channelmessage = message
+            comment.save()
+            return redirect(f'/comment/{pk}')
+    
+    context = {
+        'comments':comments,
+        'channel':channel,
+        'message':message,
+        'channels':channels,
+        'users':users,
+        'groups':groups,
+        'form':form,
+    }
+    return render(request, 'core/comments.html', context)
+
+def delete_comment(request, pk):
+    comment = ChannelMessageComment.objects.get(id=pk)
+    message = comment.channelmessage
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
+
+    if request.method == 'POST': 
+        try:
+            os.remove(f'D:/Django/Ichat/Ichat{comment.shared_media.url}')
+        except ValueError:
+            print("no file associated with it")
+        comment.delete()
+        return redirect(f'/comment/{message.id}/')
+    context = {
+        'message':comment,
+        'channels':channels,
+        'users':users,
+        'groups':groups,
+
+    }
+    return render(request, 'core/delete_message.html', context)
+
 def user_profile(request, pk):
     profile = 'user'
     user = User.objects.get(id=pk)
     channels = Channel.objects.all()
     users = User.objects.all()
     groups = Group.objects.all()
+    messages = FriendMessage.objects.filter(sender=request.user).filter(reciever=user)
 
     context = {
         'profile':profile,
@@ -386,6 +439,7 @@ def user_profile(request, pk):
         'groups':groups,
         'channels':channels,
         'users':users,
+        'messages':messages,
     }
     return render(request, 'core/profile.html', context)
 
@@ -396,6 +450,8 @@ def group_profile(request, pk):
     users = User.objects.all()
     groups = Group.objects.all()
     members = group.members.all()
+    messages = GroupMessage.objects.filter(group=group)
+
     
     context = {
         'profile':profile,
@@ -404,6 +460,7 @@ def group_profile(request, pk):
         'channels':channels,
         'users':users,
         'members':members,
+        'messages':messages,
     }
     return render(request, 'core/profile.html', context)
 
@@ -414,6 +471,7 @@ def channel_profile(request, pk):
     users = User.objects.all()
     groups = Group.objects.all()
     subscribers = channel.subscribers.all()
+    messages = ChannelMessage.objects.filter(channel=channel)
 
     context = {
         'profile':profile,
@@ -422,14 +480,39 @@ def channel_profile(request, pk):
         'channels':channels,
         'users':users,
         'subscribers':subscribers,
+        'messages':messages,
     }
     return render(request, 'core/profile.html', context)
 
-def view_media(request, pk):
+def view_group_media(request, pk):
     channels = Channel.objects.all()
     users = User.objects.all()
     groups = Group.objects.all()
     message = GroupMessage.objects.get(id=pk)
+    context = {
+        'groups':groups,
+        'channels':channels,
+        'users':users,
+        'message':message,
+    }
+    return render(request, 'core/display_media.html', context)
+def view_channel_media(request, pk):
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
+    message = ChannelMessage.objects.get(id=pk)
+    context = {
+        'groups':groups,
+        'channels':channels,
+        'users':users,
+        'message':message,
+    }
+    return render(request, 'core/display_media.html', context)
+def view_friend_media(request, pk):
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
+    message = FriendMessage.objects.get(id=pk)
     context = {
         'groups':groups,
         'channels':channels,

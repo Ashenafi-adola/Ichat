@@ -43,7 +43,7 @@
                                 </div>
                                 <div>
                                     {% if message.shared_media.url != None %}
-                                        <a href="{% url 'show_media' message.id %}">
+                                        <a href="{% url 'shared_gp_media' message.id %}">
                                             <img src="{{ message.shared_media.url }}" alt="" style="width: 400px;">
                                         </a>
                                     {% endif %}

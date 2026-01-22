@@ -68,8 +68,8 @@
                                 </div>
                                 {% if comment.owner == request.user %}
                                 <div class="d-flex gap-2">
-                                    <a href="{% url 'edit_ch_message' comment.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    <a href="{% url 'delete_ch_message' comment.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                                    <a href="{% url 'edit_comment' message.id comment.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a href="{% url 'delete_comment' comment.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
                                 </div>
                                 {% endif %}
                             </div>

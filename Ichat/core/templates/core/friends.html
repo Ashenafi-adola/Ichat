@@ -38,7 +38,9 @@
                                 </div>
                                 <div>
                                     {% if message.shared_media.url != None %}
-                                        <img src="{{ message.shared_media.url }}" alt="" style="width: 400px;">
+                                    <a href="{% url 'shared_fr_media' message.id %}">
+                                        <img src="{{ message.shared_media.url }}" alt="" style="width: 400px; ">
+                                    </a>
                                     {% endif %}
                                 </div>
                                 <div class="message-body mb-2">

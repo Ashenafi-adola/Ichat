@@ -60,7 +60,15 @@
                                 </h5>
                             </div>
                             <div class="card-body">
-                                <p class="text-muted mb-0">Media sharing coming soon...</p>
+                                {% for message in messages %}
+                                    {% if message.shared_media.url != None %}
+                                            <div style=" display: inline;">
+                                                <a href="{% url 'shared_gp_media' message.id %}">
+                                                    <img src="{{ message.shared_media.url }}" alt="" style="width: 110px; ">
+                                                </a>
+                                            </div>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -128,7 +136,15 @@
                                 </h5>
                             </div>
                             <div class="card-body">
-                                <p class="text-muted mb-0">Media sharing coming soon...</p>
+                                {% for message in messages %}
+                                    {% if message.shared_media.url != None %}
+                                            <div style=" display: inline;">
+                                                <a href="{% url 'shared_ch_media' message.id %}">
+                                                    <img src="{{ message.shared_media.url }}" alt="" style="width: 110px; ">
+                                                </a>
+                                            </div>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -163,7 +179,15 @@
                             </h5>
                         </div>
                         <div class="card-body">
-                            <p class="text-muted mb-0">Media sharing coming soon...</p>
+                            {% for message in messages %}
+                                {% if message.shared_media.url != None %}
+                                        <div style=" display: inline;">
+                                            <a href="{% url 'shared_fr_media' message.id %}">
+                                                <img src="{{ message.shared_media.url }}" alt="" style="width: 110px; ">
+                                            </a>
+                                        </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
