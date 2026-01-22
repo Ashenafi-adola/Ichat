@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from . forms import GroupForm, ChannelForm, GroupMessageForm, FriendMessageForm, ChannelMessageForm, CommentForm
+from . forms import GroupForm, ChannelForm, GroupMessageForm, FriendMessageForm, ChannelMessageForm, CommentForm, CustomUserCreationForm
 from . models import Group, FriendMessage, GroupMessage, ChannelMessage, Channel, ChannelMessageComment
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
@@ -10,9 +10,9 @@ import os
 
 def sign_up(request):
     page = 'signup'
-    form = UserCreationForm()
+    form = CustomUserCreationForm()
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             form.username = user.username.lower()

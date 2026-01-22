@@ -1,6 +1,21 @@
-from django.forms import ModelForm, Textarea, TextInput,FileField
+from django.forms import ModelForm, Textarea, TextInput,PasswordInput
 from .models import Group, Channel, GroupMessage, ChannelMessage, FriendMessage, ChannelMessageComment
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ["username"]
+        widgets = {
+            'username': TextInput(attrs={
+                'class':"form-control",
+
+            }),
+        }
+    def save(self, commit = True):
+        user = super().save(commit=True)
+        return user
 
 class GroupForm(ModelForm):
     class Meta:
