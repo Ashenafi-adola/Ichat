@@ -9,10 +9,6 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 import os
 
-channels = Channel.objects.all()
-users = User.objects.all()
-groups = Group.objects.all()
-
 @login_required(login_url='log-in')
 def create_group(request):
     form = GroupForm()
@@ -71,10 +67,13 @@ def group(request, pk):
 
 @login_required(login_url='log-in')
 def edit_group_message(request, pk):
+    groups = Group.objects.all()
     messages = GroupMessage.objects.all()
+    users = User.objects.all()
     message = GroupMessage.objects.get(id=pk)
     group = message.group
     members = group.members.all()
+    channels = Channel.objects.all()
 
     form = GroupMessageForm(instance=message)
 
@@ -100,6 +99,10 @@ def delete_group_message(request, pk):
     delete = 'message'
     message = GroupMessage.objects.get(id=pk)
     group = message.group
+    groups = Group.objects.all()
+    users = User.objects.all()
+    channels = Channel.objects.all()
+
 
     if request.method == "POST":
         try:
@@ -122,9 +125,13 @@ def delete_group_message(request, pk):
 def group_profile(request, pk):
     profile = 'group'
     group = Group.objects.get(id=pk)
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
     members = group.members.all()
     messages = GroupMessage.objects.filter(group=group)
 
+    
     context = {
         'profile':profile,
         'group':group,
@@ -138,6 +145,9 @@ def group_profile(request, pk):
 
 @login_required(login_url='log-in')
 def view_group_media(request, pk):
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
     message = GroupMessage.objects.get(id=pk)
     context = {
         'groups':groups,
@@ -151,7 +161,9 @@ def view_group_media(request, pk):
 def delete_group(request,pk):
     delete = 'group'
     group = Group.objects.get(id=pk)
-    
+    channels = Channel.objects.all()
+    users = User.objects.all()
+    groups = Group.objects.all()
     messages = GroupMessage.objects.filter(group=group)
 
     if request.method == "POST":
