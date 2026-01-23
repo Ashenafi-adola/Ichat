@@ -8,6 +8,7 @@ from django.db.models import Q
 import os
 
 
+@login_required(login_url='log-in')
 def create_channel(request):
     form = ChannelForm()
     if request.method == "POST":
@@ -25,12 +26,19 @@ def create_channel(request):
 
     return render(request, 'channels/create_group_channel.html', context)
 
+@login_required(login_url='log-in')
 def channel(request, pk):
     channel = Channel.objects.get(id=pk)
-    channels = Channel.objects.all()
-    messages = ChannelMessage.objects.all()
-    users = User.objects.all()
-    groups = Group.objects.all()
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    p = request.GET.get('p') if request.GET.get('p') != None else ''
+    
+    channels = Channel.objects.filter(Q(name__icontains=q))
+    groups = Group.objects.filter(Q(name__icontains=q))
+    users = User.objects.filter(Q(username__icontains=q))
+    messages = ChannelMessage.objects.filter(channel=channel).filter(
+        Q(body__icontains=p)
+    )
     subscribers = channel.subscribers.all()
     form = ChannelMessageForm()
 
@@ -57,13 +65,14 @@ def channel(request, pk):
     }
     return render(request, 'channels/channels.html', context)
 
+@login_required(login_url='log-in')
 def edit_channel_message(request, pk):
-    channels = Channel.objects.all()
-    messages = ChannelMessage.objects.all()
-    users = User.objects.all()
-    groups = Group.objects.all()
     message = ChannelMessage.objects.get(id=pk)
     channel = message.channel
+    channels = Channel.objects.all()
+    messages = ChannelMessage.objects.filter(channel=channel)
+    users = User.objects.all()
+    groups = Group.objects.all()
     subscribers = channel.subscribers.all()
     form = ChannelMessageForm(instance=message)
 
@@ -84,6 +93,7 @@ def edit_channel_message(request, pk):
 
     return render(request, 'channels/channels.html', context)
 
+@login_required(login_url='log-in')
 def delete_channel_message(request, pk):
     delete = 'delete'
     message = ChannelMessage.objects.get(id=pk)
@@ -108,6 +118,7 @@ def delete_channel_message(request, pk):
     }
     return render(request, 'channels/delete_page.html', context)
 
+@login_required(login_url='log-in')
 def leave_comment(request, pk):
     message = ChannelMessage.objects.get(id=pk)
     channel = message.channel
@@ -136,6 +147,7 @@ def leave_comment(request, pk):
     }
     return render(request, 'channels/comments.html', context)
 
+@login_required(login_url='log-in')
 def edit_comment(request, pk, id):
     message = ChannelMessage.objects.get(id=pk)
     channel = message.channel
@@ -165,6 +177,7 @@ def edit_comment(request, pk, id):
     }
     return render(request, 'channels/comments.html', context)
 
+@login_required(login_url='log-in')
 def delete_comment(request, pk):
     delete = 'comment'
     comment = ChannelMessageComment.objects.get(id=pk)
@@ -189,8 +202,8 @@ def delete_comment(request, pk):
     }
     return render(request, 'channels/delete_page.html', context)
 
+@login_required(login_url='log-in')
 def channel_profile(request, pk):
-    profile = 'channel'
     channel = Channel.objects.get(id=pk)
     channels = Channel.objects.all()
     users = User.objects.all()
@@ -199,7 +212,6 @@ def channel_profile(request, pk):
     messages = ChannelMessage.objects.filter(channel=channel)
 
     context = {
-        'profile':profile,
         'channel':channel,
         'groups':groups,
         'channels':channels,
@@ -209,6 +221,7 @@ def channel_profile(request, pk):
     }
     return render(request, 'channels/profile.html', context)
 
+@login_required(login_url='log-in')
 def view_channel_media(request, pk):
     channels = Channel.objects.all()
     users = User.objects.all()
@@ -222,6 +235,7 @@ def view_channel_media(request, pk):
     }
     return render(request, 'channels/display_media.html', context)
 
+@login_required(login_url='log-in')
 def delete_channel(request,pk):
     delete = 'channel'
     channel = Channel.objects.get(id=pk)

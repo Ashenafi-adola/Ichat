@@ -45,7 +45,7 @@ def group(request, pk):
     if request.method == "POST":
         if request.POST.get('ok') == 'OK':
             group.members.add(request.user)
-            return redirect(f'group/group/{pk}')
+            return redirect(f'/group/group/{pk}')
         form = GroupMessageForm(request.POST, request.FILES)
         if form.is_valid():
             message = form.save(commit=False)

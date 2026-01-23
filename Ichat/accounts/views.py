@@ -62,6 +62,7 @@ def home(request):
         }
     return render(request, 'accounts/home.html', context)
 
+@login_required(login_url='log-in')
 def friend(request, pk):
     friend = User.objects.get(id = pk)
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -69,8 +70,11 @@ def friend(request, pk):
     channels = Channel.objects.filter(Q(name__icontains=q))
     groups = Group.objects.filter(name__icontains=q)
     users = User.objects.filter(username__icontains=q)
-
-    messages = FriendMessage.objects.all()
+    
+    p = request.GET.get('p') if request.GET.get('p') != None else ''
+    messages = FriendMessage.objects.filter(
+            Q(body__icontains = p)
+        )
     form = FriendMessageForm()
     if request.method == "POST":
         form = FriendMessageForm(request.POST, request.FILES)
@@ -90,10 +94,12 @@ def friend(request, pk):
     }
     return render(request, 'accounts/friends.html', context)
 
+@login_required(login_url='log-in')
 def edit_friend_message(request, pk):
     users = User.objects.all()
     groups = Group.objects.all()
     messages = FriendMessage.objects.all()
+    channels = Channel.objects.all()
 
     message = FriendMessage.objects.get(id=pk)
     friend = message.reciever
@@ -110,9 +116,11 @@ def edit_friend_message(request, pk):
         'friend':friend,
         'users':users,
         'messages':messages,
+        'channels': channels,
     }
     return render(request, 'accounts/friends.html', context)
 
+@login_required(login_url='log-in')
 def delete_friend_message(request, pk):
     message = FriendMessage.objects.get(id=pk)
     friend = message.reciever
@@ -136,6 +144,7 @@ def delete_friend_message(request, pk):
     }
     return render(request, 'accounts/delete_message.html', context)
 
+@login_required(login_url='log-in')
 def user_profile(request, pk):
     profile = 'user'
     user = User.objects.get(id=pk)
@@ -154,6 +163,7 @@ def user_profile(request, pk):
     }
     return render(request, 'accounts/profile.html', context)
 
+@login_required(login_url='log-in')
 def view_friend_media(request, pk):
     channels = Channel.objects.all()
     users = User.objects.all()
