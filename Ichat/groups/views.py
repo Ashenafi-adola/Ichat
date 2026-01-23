@@ -79,7 +79,7 @@ def edit_group_message(request, pk):
         form = GroupMessageForm(request.POST, instance=message)
         if form.is_valid():
             form.save()
-            return redirect(f'group/group/{group.id}/')
+            return redirect(f'/group/group/{group.id}/')
     context = {
         'group':group,
         'groups':groups,
@@ -107,7 +107,7 @@ def delete_group_message(request, pk):
         except ValueError:
             print("no file associated with it")
         message.delete()
-        return redirect(f'group/group/{group.id}')
+        return redirect(f'/group/group/{group.id}')
     context = {
         'message':message,
         'group':group,

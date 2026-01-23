@@ -8,9 +8,11 @@
                 <a href="{% url 'create_group' %}" class="btn btn-primary mb-3">Create New Group</a>
                 <a href="{% url 'create_channel' %}" class="btn btn-primary mb-3">Create New Channel</a>
                 <h3 class="h5">Chats</h3>
-                <form action="" method="get">
-                    <input type="search" name="p" placeholder="Search Chat..." class="form-control">
-                    <input type="submit" value="Search" >
+                <form action="" method="get" class="mb-3">
+                    <div class="input-group">
+                        <input type="search" name="p" placeholder="Search Chat..." class="form-control">
+                        <button type="submit" class="btn btn-outline-primary">Search</button>
+                    </div>
                 </form>
                 <div class="nav flex-column">
                     <button class="nav-link">All</button>

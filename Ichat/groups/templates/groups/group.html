@@ -5,9 +5,11 @@
     <div class="card-header">
         <a href="{% url 'group_profile' group.id %}"><img src="{{ group.profile.url }}" alt="profile" style="width: 60px; height: 60px; border-radius: 30px;"></a>
         <h3 class="card-title mb-1" style="display: inline-block;">{{group.name}}</h3><br>
-        <form action="" method="get">
-            <input type="search" name="q" placeholder="Search Message..." class="form-control">
-            <input type="submit" value="Search" >
+        <form action="" method="get" class="mb-3">
+            <div class="input-group">
+                <input type="search" name="p" placeholder="Search Chat..." class="form-control">
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+            </div>
         </form>
         <small class="text-muted">{{group.description}}</small>
         <div>

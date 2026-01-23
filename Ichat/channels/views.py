@@ -2,11 +2,9 @@ from django.shortcuts import render, redirect
 from . forms import ChannelForm, ChannelMessageForm, CommentForm
 from . models import ChannelMessage, Channel, ChannelMessageComment
 from groups.models import Group
-from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.views.generic import TemplateView
 import os
 
 
