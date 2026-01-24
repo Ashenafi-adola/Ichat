@@ -45,7 +45,7 @@ def channel(request, pk):
     if request.method == "POST":
         if request.POST.get('ok') == 'OK':
             channel.subscribers.add(request.user)
-            return redirect(f'/channel/{pk}')
+            return redirect(f'/channel/channel/{pk}')
         form = ChannelMessageForm(request.POST, request.FILES)
         if form.is_valid():
             message = form.save(commit=False)

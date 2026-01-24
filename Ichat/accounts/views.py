@@ -3,7 +3,6 @@ from . forms import FriendMessageForm, CustomUserCreationForm
 from . models import FriendMessage
 from channels.models import Channel
 from groups.models import Group
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -70,7 +69,7 @@ def friend(request, pk):
     channels = Channel.objects.filter(Q(name__icontains=q))
     groups = Group.objects.filter(name__icontains=q)
     users = User.objects.filter(username__icontains=q)
-    
+
     p = request.GET.get('p') if request.GET.get('p') != None else ''
     messages = FriendMessage.objects.filter(
             Q(body__icontains = p)
@@ -151,7 +150,7 @@ def user_profile(request, pk):
     channels = Channel.objects.all()
     users = User.objects.all()
     groups = Group.objects.all()
-    messages = FriendMessage.objects.filter(sender=request.user).filter(reciever=user)
+    messages = FriendMessage.objects.all()
 
     context = {
         'profile':profile,
