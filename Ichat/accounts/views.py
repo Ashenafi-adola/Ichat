@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from . forms import FriendMessageForm, CustomUserCreationForm
 from . models import FriendMessage
-from channels.models import Channel
+from ichat_channel.models import Channel
 from groups.models import Group
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
+from itertools import chain
 import os
 
 def sign_up(request):
@@ -53,11 +54,14 @@ def home(request):
     channels = Channel.objects.filter(Q(name__icontains=q))
     groups = Group.objects.filter(name__icontains=q)
     users = User.objects.filter(username__icontains=q)
+
+    all_query_sets = chain(channels, groups, users)
     context = {
         'channels':channels,
         'groups':groups,
         'page':page,
         'users':users,
+        'all': all_query_sets
         }
     return render(request, 'accounts/home.html', context)
 

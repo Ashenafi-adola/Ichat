@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from . forms import ChannelForm, ChannelMessageForm, CommentForm
-from . models import ChannelMessage, Channel, ChannelMessageComment
+from .forms import ChannelForm, ChannelMessageForm, CommentForm
+from .models import ChannelMessage, Channel, ChannelMessageComment
 from groups.models import Group
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -24,7 +24,7 @@ def create_channel(request):
         'form' : form,
     }
 
-    return render(request, 'channels/create_group_channel.html', context)
+    return render(request, 'ichat_channelichat_channel/create_group_channel.html', context)
 
 @login_required(login_url='log-in')
 def channel(request, pk):
@@ -63,7 +63,7 @@ def channel(request, pk):
         'subscribers': subscribers,
         'form':form,
     }
-    return render(request, 'channels/channels.html', context)
+    return render(request, 'ichat_channel/channels.html', context)
 
 @login_required(login_url='log-in')
 def edit_channel_message(request, pk):
@@ -91,7 +91,7 @@ def edit_channel_message(request, pk):
         'subscribers': subscribers,
     }
 
-    return render(request, 'channels/channels.html', context)
+    return render(request, 'ichat_channel/channels.html', context)
 
 @login_required(login_url='log-in')
 def delete_channel_message(request, pk):
@@ -116,7 +116,7 @@ def delete_channel_message(request, pk):
         'groups':groups,
         'delete': delete,
     }
-    return render(request, 'channels/delete_page.html', context)
+    return render(request, 'ichat_channel/delete_page.html', context)
 
 @login_required(login_url='log-in')
 def leave_comment(request, pk):
@@ -145,7 +145,7 @@ def leave_comment(request, pk):
         'groups':groups,
         'form':form,
     }
-    return render(request, 'channels/comments.html', context)
+    return render(request, 'ichat_channel/comments.html', context)
 
 @login_required(login_url='log-in')
 def edit_comment(request, pk, id):
@@ -175,7 +175,7 @@ def edit_comment(request, pk, id):
         'groups':groups,
         'form':form,
     }
-    return render(request, 'channels/comments.html', context)
+    return render(request, 'ichat_channel/comments.html', context)
 
 @login_required(login_url='log-in')
 def delete_comment(request, pk):
@@ -200,7 +200,7 @@ def delete_comment(request, pk):
         'groups':groups,
         'delete':delete,
     }
-    return render(request, 'channels/delete_page.html', context)
+    return render(request, 'ichat_channel/delete_page.html', context)
 
 @login_required(login_url='log-in')
 def channel_profile(request, pk):
@@ -219,7 +219,7 @@ def channel_profile(request, pk):
         'subscribers':subscribers,
         'messages':messages,
     }
-    return render(request, 'channels/profile.html', context)
+    return render(request, 'ichat_channel/profile.html', context)
 
 @login_required(login_url='log-in')
 def view_channel_media(request, pk):
@@ -233,7 +233,7 @@ def view_channel_media(request, pk):
         'users':users,
         'message':message,
     }
-    return render(request, 'channels/display_media.html', context)
+    return render(request, 'ichat_channel/display_media.html', context)
 
 @login_required(login_url='log-in')
 def delete_channel(request,pk):
@@ -261,4 +261,4 @@ def delete_channel(request,pk):
         'channels':channels,
         'users':users,
     }
-    return render(request, 'channels/delete_page.html', context)
+    return render(request, 'ichat_channel/delete_page.html', context)

@@ -14,15 +14,15 @@
                         <button type="submit" class="btn btn-outline-primary">Search</button>
                     </div>
                 </form>
-                <div class="nav flex-column">
-                    <button class="nav-link">All</button>
-                    <button class="nav-link">Groups</button>
-                    <button class="nav-link">Channels</button>
-                    <button class="nav-link">Friends</button>
+                <div class="nav flex-column list-group list-group-flush">
+                    <a href="#" class="nav-link list-group-item list-group-item-action">All</a>
+                    <a href="#" class="nav-link list-group-item list-group-item-action">Groups</a>
+                    <a href="#" class="nav-link list-group-item list-group-item-action">Channels</a>
+                    <a href="#" class="nav-link list-group-item list-group-item-action">Friends</a>
                 </div>
                 <hr>
                 <div class="list-group list-group-flush">
-                    {% for group in groups %}
+                    {% for group in all %}
                     
                     <a href="{% url 'group' group.id %}" class="list-group-item list-group-item-action" >
                         <img src="{{ group.profile.url }}" alt="profile" style="width: 40px; height: 40px; border-radius: 20px;">
