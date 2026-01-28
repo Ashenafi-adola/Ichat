@@ -52,7 +52,7 @@ def group(request, pk):
             message.owner = request.user
             message.group = group
             message.save()
-        return redirect(f'/group/group/{pk}')
+        
 
     context = {
         'group':group,
