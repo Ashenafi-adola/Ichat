@@ -36,11 +36,11 @@ class CoreConsumer(AsyncWebsocketConsumer):
                 "message": message,
                 "username": username,
                 "user_id": user_id,
-                "updated_at": str(self.get_current_timestamp())
+                "updated_at": str(await self.get_current_timestamp())
             }
         )
 
-    async def chat_message(self, event):
+    async def group_message(self, event):
         message = event["message"]
         username = event["username"]
         user_id = event["user_id"]
@@ -55,7 +55,7 @@ class CoreConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_message(self, message): 
-        group = Group.objects.get(name=self.group_name)
+        group = Group.objects.get(name=self.room_name)
         user = User.objects.get(id=self.scope['user'].id)
         GroupMessage.objects.create(
             owner=user,
@@ -63,8 +63,7 @@ class CoreConsumer(AsyncWebsocketConsumer):
             body=message,
         )
     
+    @database_sync_to_async
     def get_current_timestamp(self):
-
         from django.utils import timezone
         return timezone.now()
-

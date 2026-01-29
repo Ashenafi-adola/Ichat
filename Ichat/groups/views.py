@@ -110,7 +110,7 @@ def delete_group_message(request, pk):
         except ValueError:
             print("no file associated with it")
         message.delete()
-        return redirect(f'/group/group/{group.id}')
+        return redirect(f'/group/group/{group.name}')
     context = {
         'message':message,
         'group':group,
