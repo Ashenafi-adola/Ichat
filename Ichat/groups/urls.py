@@ -5,7 +5,7 @@ urlpatterns = [
     # Creating pages
     path('create_group/', views.create_group, name='create_group'),
     # Main pages
-    path('group/<int:pk>/', views.group, name='group'),
+    path('group/<str:group_name>/', views.group, name='group'),
     # Editting pages
     path('edit_group_message/<int:pk>/', views.edit_group_message, name='edit_gp_message'),
     # Deleting pages

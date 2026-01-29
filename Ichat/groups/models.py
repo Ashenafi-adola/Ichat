@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 
 class Group(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,unique=True)
     profile = models.ImageField(upload_to='profiles/group/',null=True, blank=True)
-    description = models.CharField(max_length=300)
+    description = models.CharField(max_length=300, null=True, blank=True)
     members = models.ManyToManyField(User, related_name="member")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

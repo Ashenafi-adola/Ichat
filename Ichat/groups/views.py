@@ -26,8 +26,8 @@ def create_group(request):
     return render(request, 'groups/create_group_channel.html', context)    
 
 @login_required(login_url='log-in')
-def group(request, pk):
-    group = Group.objects.get(id=pk)
+def group(request, group_name):
+    group = Group.objects.get(name=group_name)
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
     p = request.GET.get('p') if request.GET.get('p') != None else ''
@@ -42,7 +42,7 @@ def group(request, pk):
     members = group.members.all()
     
     form = GroupMessageForm()
-    if request.method == "POST":
+    '''if request.method == "POST":
         if request.POST.get('ok') == 'OK':
             group.members.add(request.user)
             return redirect(f'/group/group/{pk}')
@@ -51,7 +51,7 @@ def group(request, pk):
             message = form.save(commit=False)
             message.owner = request.user
             message.group = group
-            message.save()
+            message.save()'''
         
 
     context = {
