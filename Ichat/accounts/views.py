@@ -138,7 +138,7 @@ def delete_friend_message(request, pk):
         except ValueError:
             print("no file associated with it")        
         message.delete()
-        return redirect(f'/friend/{friend.id}')
+        return redirect(f'/friend/{friend.username}')
     context = {
         'message':message,
         'channels':channels,

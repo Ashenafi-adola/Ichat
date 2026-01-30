@@ -24,7 +24,7 @@ def create_channel(request):
         'form' : form,
     }
 
-    return render(request, 'ichat_channelichat_channel/create_group_channel.html', context)
+    return render(request, 'ichat_channel/create_group_channel.html', context)
 
 @login_required(login_url='log-in')
 def channel(request, pk):
