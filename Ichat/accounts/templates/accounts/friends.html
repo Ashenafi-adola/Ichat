@@ -12,15 +12,15 @@
             </a>
         
             <h3 class="card-title mb-0">{{ friend.username }}</h3>
-            
+            <form action="" method="get" class="mb-3">
+                <div class="input-group">
+                    <input type="search" name="p" placeholder="Search Chat..." class="form-control">
+                    <button type="submit" class="btn btn-outline-primary">Search</button>
+                </div>
+            </form>
         </div>
-        <small class="text-muted"></small>
-        <form action="" method="get" class="mb-3">
-            <div class="input-group">
-                <input type="search" name="p" placeholder="Search Chat..." class="form-control">
-                <button type="submit" class="btn btn-outline-primary">Search</button>
-            </div>
-        </form>
+        
+        
     </div>
     <div class="card-body d-flex flex-column p-3">
         
@@ -84,11 +84,11 @@
 {{ user.username|json_script:"current-username" }}
 
 <script >
-    const groupName = JSON.parse(document.getElementById('friend-name').textContent);
+    const friendName = JSON.parse(document.getElementById('friend-name').textContent);
     const currentUsername = JSON.parse(document.getElementById('current-username').textContent);
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const groupSocket = new WebSocket(
-         wsProtocol + '//' + window.location.host + '/ws/friend/' + groupName + '/'
+         wsProtocol + '//' + window.location.host + '/ws/friend/' + friendName + '/'
      );
 
     const chatMessages = document.getElementById('chats');
