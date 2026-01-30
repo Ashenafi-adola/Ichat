@@ -66,8 +66,8 @@ def home(request):
     return render(request, 'accounts/home.html', context)
 
 @login_required(login_url='log-in')
-def friend(request, pk):
-    friend = User.objects.get(id = pk)
+def friend(request, friend_name):
+    friend = User.objects.get(username = friend_name)
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
     channels = Channel.objects.filter(Q(name__icontains=q))
@@ -79,14 +79,15 @@ def friend(request, pk):
             Q(body__icontains = p)
         )
     form = FriendMessageForm()
-    if request.method == "POST":
+    '''if request.method == "POST":
         form = FriendMessageForm(request.POST, request.FILES)
         if form.is_valid():
             message = form.save(commit=False)
             message.sender = request.user
             message.reciever = friend
             message.save()
-            return redirect(f'/friend/{pk}')
+            return redirect(f'/friend/{pk}')'''
+    
     context = {
         'form':form,
         'groups':groups,

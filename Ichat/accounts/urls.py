@@ -9,7 +9,7 @@ urlpatterns = [
     # Home page
     path('', views.home, name='home'),
     # Main pages
-    path('friend/<int:pk>', views.friend, name='friend'),
+    path('friend/<str:friend_name>', views.friend, name='friend'),
     # Editting pages
     path('edit_friend_message/<int:pk>/', views.edit_friend_message, name='edit_fr_message'),
     # Deleting pages
