@@ -3,7 +3,7 @@ from .forms import ChannelForm, ChannelMessageForm, CommentForm
 from .models import ChannelMessage, Channel, ChannelMessageComment
 from groups.models import Group
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from accounts.models import CustomUser
 from django.db.models import Q
 import os
 
@@ -35,7 +35,7 @@ def channel(request, pk):
     
     channels = Channel.objects.filter(Q(name__icontains=q))
     groups = Group.objects.filter(Q(name__icontains=q))
-    users = User.objects.filter(Q(username__icontains=q))
+    users = CustomUser.objects.filter(Q(username__icontains=q))
     messages = ChannelMessage.objects.filter(channel=channel).filter(
         Q(body__icontains=p)
     )
@@ -71,7 +71,7 @@ def edit_channel_message(request, pk):
     channel = message.channel
     channels = Channel.objects.all()
     messages = ChannelMessage.objects.filter(channel=channel)
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     subscribers = channel.subscribers.all()
     form = ChannelMessageForm(instance=message)
@@ -99,7 +99,7 @@ def delete_channel_message(request, pk):
     message = ChannelMessage.objects.get(id=pk)
     channel = message.channel
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
 
     if request.method == 'POST': 
@@ -124,7 +124,7 @@ def leave_comment(request, pk):
     channel = message.channel
     comments = ChannelMessageComment.objects.filter(channelmessage=message)
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     form = CommentForm()
     if request.method == "POST":
@@ -153,7 +153,7 @@ def edit_comment(request, pk, id):
     channel = message.channel
     comments = ChannelMessageComment.objects.filter(channelmessage=message)
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     comment = ChannelMessageComment.objects.get(id=id)
     groups = Group.objects.all()
     form = CommentForm(instance=comment)
@@ -183,7 +183,7 @@ def delete_comment(request, pk):
     comment = ChannelMessageComment.objects.get(id=pk)
     message = comment.channelmessage
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
 
     if request.method == 'POST': 
@@ -206,7 +206,7 @@ def delete_comment(request, pk):
 def channel_profile(request, pk):
     channel = Channel.objects.get(id=pk)
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     subscribers = channel.subscribers.all()
     messages = ChannelMessage.objects.filter(channel=channel)
@@ -224,7 +224,7 @@ def channel_profile(request, pk):
 @login_required(login_url='log-in')
 def view_channel_media(request, pk):
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     message = ChannelMessage.objects.get(id=pk)
     context = {
@@ -240,7 +240,7 @@ def delete_channel(request,pk):
     delete = 'channel'
     channel = Channel.objects.get(id=pk)
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     messages = ChannelMessage.objects.filter(channel=channel)
 

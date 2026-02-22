@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Textarea, TextInput,PasswordInput
+from django.forms import ModelForm, Textarea, TextInput
 from .models import Group, GroupMessage
 
 

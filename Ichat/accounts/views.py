@@ -5,7 +5,7 @@ from ichat_channel.models import Channel
 from groups.models import Group
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from accounts.models import CustomUser
 from django.db.models import Q
 from itertools import chain
 import os
@@ -53,7 +53,7 @@ def home(request):
 
     channels = Channel.objects.filter(Q(name__icontains=q))
     groups = Group.objects.filter(name__icontains=q)
-    users = User.objects.filter(username__icontains=q)
+    users = CustomUser.objects.filter(username__icontains=q)
 
     all_query_sets = chain(channels, groups, users)
     context = {
@@ -67,12 +67,12 @@ def home(request):
 
 @login_required(login_url='log-in')
 def friend(request, friend_name):
-    friend = User.objects.get(username = friend_name)
+    friend = CustomUser.objects.get(username = friend_name)
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
     channels = Channel.objects.filter(Q(name__icontains=q))
     groups = Group.objects.filter(name__icontains=q)
-    users = User.objects.filter(username__icontains=q)
+    users = CustomUser.objects.filter(username__icontains=q)
 
     p = request.GET.get('p') if request.GET.get('p') != None else ''
     messages = FriendMessage.objects.filter(
@@ -100,7 +100,7 @@ def friend(request, friend_name):
 
 @login_required(login_url='log-in')
 def edit_friend_message(request, pk):
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     messages = FriendMessage.objects.all()
     channels = Channel.objects.all()
@@ -129,7 +129,7 @@ def delete_friend_message(request, pk):
     message = FriendMessage.objects.get(id=pk)
     friend = message.reciever
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
 
     if request.method == 'POST':
@@ -144,16 +144,16 @@ def delete_friend_message(request, pk):
         'channels':channels,
         'users':users,
         'groups':groups,
-
+        'friend':friend,
     }
     return render(request, 'accounts/delete_message.html', context)
 
 @login_required(login_url='log-in')
 def user_profile(request, pk):
     profile = 'user'
-    user = User.objects.get(id=pk)
+    user = CustomUser.objects.get(id=pk)
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     messages = FriendMessage.objects.all()
 
@@ -170,7 +170,7 @@ def user_profile(request, pk):
 @login_required(login_url='log-in')
 def view_friend_media(request, pk):
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     message = FriendMessage.objects.get(id=pk)
     context = {

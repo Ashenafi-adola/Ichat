@@ -2,10 +2,8 @@ from django.shortcuts import render, redirect
 from . forms import GroupForm, GroupMessageForm
 from . models import Group, GroupMessage
 from ichat_channel.models import Channel
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from accounts.models import CustomUser
 from django.db.models import Q
 import os
 
@@ -33,7 +31,7 @@ def group(request, group_name):
     p = request.GET.get('p') if request.GET.get('p') != None else ''
     channels = Channel.objects.filter(Q(name__icontains=q))
     groups = Group.objects.filter(name__icontains=q)
-    users = User.objects.filter(username__icontains=q)
+    users = CustomUser.objects.filter(username__icontains=q)
 
     messages = GroupMessage.objects.filter(
         Q(body__icontains = p)
@@ -69,7 +67,7 @@ def group(request, group_name):
 def edit_group_message(request, pk):
     groups = Group.objects.all()
     messages = GroupMessage.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     message = GroupMessage.objects.get(id=pk)
     group = message.group
     members = group.members.all()
@@ -100,7 +98,7 @@ def delete_group_message(request, pk):
     message = GroupMessage.objects.get(id=pk)
     group = message.group
     groups = Group.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     channels = Channel.objects.all()
 
 
@@ -126,7 +124,7 @@ def group_profile(request, pk):
     profile = 'group'
     group = Group.objects.get(id=pk)
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     members = group.members.all()
     messages = GroupMessage.objects.filter(group=group)
@@ -146,7 +144,7 @@ def group_profile(request, pk):
 @login_required(login_url='log-in')
 def view_group_media(request, pk):
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     message = GroupMessage.objects.get(id=pk)
     context = {
@@ -162,7 +160,7 @@ def delete_group(request,pk):
     delete = 'group'
     group = Group.objects.get(id=pk)
     channels = Channel.objects.all()
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     groups = Group.objects.all()
     messages = GroupMessage.objects.filter(group=group)
 

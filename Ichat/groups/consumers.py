@@ -1,6 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from django.contrib.auth.models import User
+from accounts.models import CustomUser
 from .models import Group, GroupMessage
 import json
 
@@ -56,7 +56,7 @@ class CoreConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def save_message(self, message): 
         group = Group.objects.get(name=self.room_name)
-        user = User.objects.get(id=self.scope['user'].id)
+        user = CustomUser.objects.get(id=self.scope['user'].id)
         GroupMessage.objects.create(
             owner=user,
             group=group,

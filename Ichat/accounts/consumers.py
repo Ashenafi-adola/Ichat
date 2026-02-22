@@ -65,6 +65,14 @@ class CoreConsumer(AsyncWebsocketConsumer):
             reciever=friend,
             body=message,
         )
+        
+    @database_sync_to_async
+    def delete_message(self, message_id):
+        try:
+            msg = FriendMessage.objects.get(id=message_id)
+            msg.delete()
+        except Exception:
+            print("An Exception occured")
     
     @database_sync_to_async
     def get_current_timestamp(self):

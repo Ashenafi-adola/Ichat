@@ -20,4 +20,15 @@
         </div>
     </div>
 </div>
+{{ friend.username|json_script:"friend-name" }}
+{{ user.username|json_script:"current-username" }}
+<script>
+    const friendName = JSON.parse(document.getElementById('friend-name').textContent);
+    const currentUsername = JSON.parse(document.getElementById('current-username').textContent);
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    
+    const groupSocket = new WebSocket(
+         wsProtocol + '//' + window.location.host + '/ws/friend/' + friendName + '/'
+     );
+</script>
 {% endblock %}
