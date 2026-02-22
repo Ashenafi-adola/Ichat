@@ -1,19 +1,26 @@
-from django.forms import ModelForm, Textarea, TextInput
+from django.forms import ModelForm, Textarea, TextInput, ImageField, EmailField, PasswordInput, FileInput
 from .models import FriendMessage
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-
+from accounts.models import CustomUser
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
-        model = User
-        fields = ["username"]
+        model = CustomUser
+        fields = ["username","profile","email", "password1", "password2"]
         widgets = {
             'username': TextInput(attrs={
                 'class':"form-control",
             }),
+            'profile': FileInput(attrs={
+                'class': "profile",
+            })
+
         }
     def save(self, commit = True):
-        user = super().save(commit=True)
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        user.profile = self.cleaned_data['profile']
+        if commit:
+            user.save()
         return user
 
 class FriendMessageForm(ModelForm):
