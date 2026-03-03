@@ -1,7 +1,7 @@
 function LogInPage() {
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">   
-        <form className="row g-3 border rounded p-4 shadow-sm" style={{ width: "420px" }}>
+            <form className="row g-3 border rounded p-4 shadow-sm" style={{ width: "400px" }}>
                 <h1 className="text-center">Sign In</h1>
                 <p className="text-center text-muted">Welcome back to I-CHAT</p>
                 
