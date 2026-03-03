@@ -1,13 +1,15 @@
 from django.urls import path
 from .import views
+from . views import RegisterView, Home
+from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     # Authentications
-    path('sign-up/', views.sign_up, name="sign-up"),
-    path('sign-in/', views.log_in, name='log-in'),
+    path('sign-up/', RegisterView.as_view(), name="sign-up"),
+    path('sign-in/', LoginView.as_view(template_name = 'accounts/sign_in.html'), name='log-in'),
     path('logout/', views.log_out, name='logout'),
     # Home page
-    path('', views.home, name='home'),
+    path('', Home.as_view(), name='home'),
     # Main pages
     path('friend/<str:friend_name>', views.friend, name='friend'),
     # Editting pages

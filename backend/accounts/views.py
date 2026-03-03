@@ -9,42 +9,31 @@ from accounts.models import CustomUser
 from django.db.models import Q
 from itertools import chain
 import os
+from django.views.generic import CreateView, ListView
 
-def sign_up(request):
-    page = 'signup'
-    form = CustomUserCreationForm()
-    if request.method == "POST":
-        form = CustomUserCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = form.save(commit=False)
-            form.username = user.username.lower()
-            user.save()
-            login(request, user)
-            return redirect("home")
-    context = {
-        "form":form,
-        "page":page,
-    }
-    return render(request, 'accounts/sign_in_sign_up.html', context)
+class RegisterView(CreateView):
+    form_class = CustomUserCreationForm
+    template_name = "accounts/sign_up.html"
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        form.username = user.username.lower()
+        user.save()
+        login(self.request, user)
+        return redirect("home")
 
 def log_out(request):
     logout(request)
     return redirect('home')
-    
-def log_in(request):
-    page = 'signin'
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+class Home(ListView):
+    template_name = 'accounts/home.html'
 
-        user = authenticate(request, username= username, password=password)
-        if user != None:
-            login(request, user)
-            return redirect("home")
-    context = {
-        "page":page,
-    }
-    return render(request, 'accounts/sign_in_sign_up.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['channels'] = Channel.objects.all()
+        context['groups'] = Group.objects.all()
+        context['users'] = CustomUser.objects.all()
+        return context
 
 @login_required(login_url='log-in')
 def home(request):
