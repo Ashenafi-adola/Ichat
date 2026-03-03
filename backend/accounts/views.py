@@ -7,9 +7,10 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
 from django.db.models import Q
-from itertools import chain
 import os
 from django.views.generic import CreateView, ListView
+from django.views.generic.edit import ModelFormMixin
+from django.utils.decorators import method_decorator
 
 class RegisterView(CreateView):
     form_class = CustomUserCreationForm
@@ -25,9 +26,11 @@ class RegisterView(CreateView):
 def log_out(request):
     logout(request)
     return redirect('home')
+
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
 class Home(ListView):
     template_name = 'accounts/home.html'
-
+    model = CustomUser
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['channels'] = Channel.objects.all()
@@ -35,24 +38,21 @@ class Home(ListView):
         context['users'] = CustomUser.objects.all()
         return context
 
-@login_required(login_url='log-in')
-def home(request):
-    page = "home"
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
+class FriendDetail(ListView, ModelFormMixin):
+    model = CustomUser
+    template_name = 'accounts/friends.html'
+    form_class = FriendMessageForm
 
-    channels = Channel.objects.filter(Q(name__icontains=q))
-    groups = Group.objects.filter(name__icontains=q)
-    users = CustomUser.objects.filter(username__icontains=q)
 
-    all_query_sets = chain(channels, groups, users)
-    context = {
-        'channels':channels,
-        'groups':groups,
-        'page':page,
-        'users':users,
-        'all': all_query_sets
-        }
-    return render(request, 'accounts/home.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['channels'] = Channel.objects.all()
+        context['groups'] = Group.objects.all()
+        context['users'] = CustomUser.objects.all()
+        context['messages'] = FriendMessage.objects.all()
+        context['friend'] = CustomUser.objects.get(id=pk)
+
+        return context   
 
 @login_required(login_url='log-in')
 def friend(request, friend_name):
