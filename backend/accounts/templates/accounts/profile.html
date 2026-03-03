@@ -9,9 +9,10 @@
             <h1 class="card-title mb-2"><a href="{{request.META.HTTP_REFERER}}">⬅️</a> Profile</h1>
             <div class="card shadow mb-4">
                 <div class="card-body text-center">
-                    <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
-                     style="width: 100px; height: 100px; font-weight: bold; font-size: 90px; justify-self: center;">
-                    {{ user.username|first|upper }}
+                    <a href="{% url 'friend' user.username %}" class="list-group-item list-group-item-action">
+                        <img src="{{ user.profile.url }}" alt="profile" style="width: 150px; height: 150px; border-radius: 75px;">
+                        {{ user.username}}
+                    </a>
                 </div>
                     <h2 class="card-title mb-2">{{ user.username }}</h2>
                 </div>
