@@ -1,8 +1,8 @@
-import { NavBar } from '../components/navbar'
+import ChatList from "../components/chatList";
 function Home() {
     return (
         <>
-
+            <ChatList/>
         </>
     );
 }
