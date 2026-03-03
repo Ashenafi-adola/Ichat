@@ -1,0 +1,39 @@
+from django.forms import ModelForm, Textarea, TextInput, ImageField, EmailField, PasswordInput, FileInput
+from .models import FriendMessage
+from django.contrib.auth.forms import UserCreationForm
+from accounts.models import CustomUser
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ["username","profile","email", "password1", "password2"]
+        widgets = {
+            'username': TextInput(attrs={
+                'class':"form-control",
+            }),
+            'profile': FileInput(attrs={
+                'class': "profile",
+            })
+
+        }
+    def save(self, commit = True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        user.profile = self.cleaned_data['profile']
+        if commit:
+            user.save()
+        return user
+
+class FriendMessageForm(ModelForm):
+    class Meta:
+        model = FriendMessage
+        fields = ['body', 'shared_media']
+        widgets = {
+            'body': Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'name': 'message',
+                'style': "width: 100%",
+                'data-custom': 'some-value',
+                'placeholder': "Type message here..."
+            }),
+        }
