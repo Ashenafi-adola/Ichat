@@ -5,6 +5,7 @@ import './App.css'
 import  NavBar  from './components/navbar'
 import Home from './pages/home'
 import LogInPage from './pages/auth'
+import ChatArea from './components/ChatArea'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,7 +14,7 @@ function App() {
     <>
       <NavBar/> 
       <Home/> 
-      <LogInPage/>
+      <ChatArea/>
     </>
   )
 }
