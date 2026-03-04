@@ -7,6 +7,7 @@ import Home from './pages/home'
 import LogInPage from './pages/auth'
 import ChatArea from './components/ChatArea'
 
+
 function App() {
   const [count, setCount] = useState(0)
 

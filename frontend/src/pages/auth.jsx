@@ -4,25 +4,13 @@ function LogInPage() {
             <form className="row g-3 border rounded p-4 shadow-sm" style={{ width: "400px" }}>
                 <h1 className="text-center">Sign In</h1>
                 <p className="text-center text-muted">Welcome back to I-CHAT</p>
-                
-                <div className="col-md-12">
-                    <label htmlFor="inputEmail4" className="form-label">Username</label>
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        id="inputEmail4" 
-                        placeholder="Enter username"
-                    />
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"/>
+                    <label for="floatingInput">Email address</label>
                 </div>
-                
-                <div className="col-md-12">
-                    <label htmlFor="inputPassword4" className="form-label">Password</label>
-                    <input 
-                        type="password" 
-                        className="form-control" 
-                        id="inputPassword4" 
-                        placeholder="Enter password"
-                    />
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                    <label for="floatingPassword">Password</label>
                 </div>
                 
                 <div className="col-12 d-grid">
