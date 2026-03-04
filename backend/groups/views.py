@@ -40,7 +40,7 @@ def group(request, group_name):
     members = group.members.all()
     
     form = GroupMessageForm()
-    '''if request.method == "POST":
+    if request.method == "POST":
         if request.POST.get('ok') == 'OK':
             group.members.add(request.user)
             return redirect(f'/group/group/{pk}')
@@ -49,7 +49,7 @@ def group(request, group_name):
             message = form.save(commit=False)
             message.owner = request.user
             message.group = group
-            message.save()'''
+            message.save()
         
 
     context = {

@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
 from django.db.models import Q
 import os
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 from django.views.generic.edit import ModelFormMixin
 from django.utils.decorators import method_decorator
 
@@ -36,13 +36,12 @@ class Home(ListView):
         context['channels'] = Channel.objects.all()
         context['groups'] = Group.objects.all()
         context['users'] = CustomUser.objects.all()
-        return context
 
-class FriendDetail(ListView, ModelFormMixin):
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
+class Friend(DetailView, ModelFormMixin):
     model = CustomUser
     template_name = 'accounts/friends.html'
     form_class = FriendMessageForm
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -50,42 +49,15 @@ class FriendDetail(ListView, ModelFormMixin):
         context['groups'] = Group.objects.all()
         context['users'] = CustomUser.objects.all()
         context['messages'] = FriendMessage.objects.all()
-        context['friend'] = CustomUser.objects.get(id=pk)
+        context['friend'] = CustomUser.objects.get(id=self.kwargs['pk'])
 
-        return context   
-
-@login_required(login_url='log-in')
-def friend(request, friend_name):
-    friend = CustomUser.objects.get(username = friend_name)
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
-
-    channels = Channel.objects.filter(Q(name__icontains=q))
-    groups = Group.objects.filter(name__icontains=q)
-    users = CustomUser.objects.filter(username__icontains=q)
-
-    p = request.GET.get('p') if request.GET.get('p') != None else ''
-    messages = FriendMessage.objects.filter(
-            Q(body__icontains = p)
-        )
-    form = FriendMessageForm()
-    '''if request.method == "POST":
-        form = FriendMessageForm(request.POST, request.FILES)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = request.user
-            message.reciever = friend
-            message.save()
-            return redirect(f'/friend/{pk}')'''
-    
-    context = {
-        'form':form,
-        'groups':groups,
-        'friend':friend,
-        'users':users,
-        'messages':messages,
-        'channels':channels,
-    }
-    return render(request, 'accounts/friends.html', context)
+        return context 
+    def form_valid(self, form):
+        message = form.save(commit=False)
+        message.sender = self.request.user
+        message.reciever = CustomUser.objects.get(id=self.kwargs['pk'])
+        message.save()
+        return redirect(f'/friend/{self.kwargs["pk"]}')
 
 @login_required(login_url='log-in')
 def edit_friend_message(request, pk):
