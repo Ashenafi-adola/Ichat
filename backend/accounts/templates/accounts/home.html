@@ -7,21 +7,21 @@
             <div class="p-3 flex-grow-1 overflow-auto">
                 <a href="{% url 'create_group' %}" class="btn btn-primary mb-3">Create New Group</a>
                 <a href="{% url 'create_channel' %}" class="btn btn-primary mb-3">Create New Channel</a>
-                <h3 class="h5" style="color: blue;">Chats</h3>
+                <h3 class="h5">Chats</h3>
                 <form action="" method="get" class="mb-3">
                     <div class="input-group">
                         <input type="search" name="p" placeholder="Search Chat..." class="form-control">
                         <button type="submit" class="btn btn-outline-primary">Search</button>
                     </div>
                 </form>
-                <div class="nav flex-column list-group list-group-flush" style="border-radius: 10px;">
-                    <a href="#" class="nav-link list-group-item list-group-item-action">All</a>
-                    <a href="#" class="nav-link list-group-item list-group-item-action">Groups</a>
-                    <a href="#" class="nav-link list-group-item list-group-item-action">Channels</a>
-                    <a href="#" class="nav-link list-group-item list-group-item-action">Friends</a>
+                <div class="nav flex-column">
+                    <button class="nav-link">All</button>
+                    <button class="nav-link">Groups</button>
+                    <button class="nav-link">Channels</button>
+                    <button class="nav-link">Friends</button>
                 </div>
                 <hr>
-                <div class="list-group list-group-flush" style="border-radius: 10px; background-color: rgb(175, 211, 211);">
+                <div class="list-group list-group-flush">
                     {% for group in groups %}
                     
                     <a href="{% url 'group' group.name %}" class="list-group-item list-group-item-action" >
@@ -38,8 +38,13 @@
                     {% for user in users %}
                         {% if user != request.user %}
                             <a href="{% url 'friend' user.id %}" class="list-group-item list-group-item-action">
-                                <img src="{{ friend.profile.url }}" alt="profile" style="width: 40px; height: 40px; border-radius: 20px;">
-                                {{ friend.username}}
+                                <div class="d-flex align-items-center">
+                                        <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                             style="width: 40px; height: 40px; font-weight: bold; font-size: 25px;">
+                                            {{ user.username|first|upper }}
+                                        </div>                                
+                                    {{ user.username.capitalize }}
+                                </div>
                             </a>
                         {% endif %}
                     {% endfor %}

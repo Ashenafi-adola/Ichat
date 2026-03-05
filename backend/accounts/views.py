@@ -8,9 +8,10 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
 from django.db.models import Q
 import os
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.views.generic.edit import ModelFormMixin
 from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
 
 class RegisterView(CreateView):
     form_class = CustomUserCreationForm
@@ -36,6 +37,7 @@ class Home(ListView):
         context['channels'] = Channel.objects.all()
         context['groups'] = Group.objects.all()
         context['users'] = CustomUser.objects.all()
+        return context
 
 @method_decorator(login_required(login_url='log-in'), name='dispatch')
 class Friend(DetailView, ModelFormMixin):
@@ -58,32 +60,36 @@ class Friend(DetailView, ModelFormMixin):
         message.reciever = CustomUser.objects.get(id=self.kwargs['pk'])
         message.save()
         return redirect(f'/friend/{self.kwargs["pk"]}')
-
-@login_required(login_url='log-in')
-def edit_friend_message(request, pk):
-    users = CustomUser.objects.all()
-    groups = Group.objects.all()
-    messages = FriendMessage.objects.all()
-    channels = Channel.objects.all()
-
-    message = FriendMessage.objects.get(id=pk)
-    friend = message.reciever
-    form = FriendMessageForm(instance=message)
-
-    if request.method == "POST":
-        form = FriendMessageForm(request.POST, instance=message)
+    def post(self, request, *args, **kwargs):
+        form = FriendMessageForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect(f'/friend/{friend.id}')
-    context = {
-        'form':form,
-        'groups':groups,
-        'friend':friend,
-        'users':users,
-        'messages':messages,
-        'channels': channels,
-    }
-    return render(request, 'accounts/friends.html', context)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+        
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
+class EditFriendMessage(UpdateView):
+    model = FriendMessage
+    form_class = FriendMessageForm
+    template_name = 'accounts/friends.html'
+    
+    def get_success_url(self):
+        return f'/friend/{self.get_context_data()['friend'].id}/'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['channels'] = Channel.objects.all()
+        context['groups'] = Group.objects.all()
+        context['users'] = CustomUser.objects.all()
+        context['messages'] = FriendMessage.objects.all()
+        context['friend'] = FriendMessage.objects.get(id=self.kwargs['pk']).reciever
+
+        return context
+class DeleteFriendMessage(DeleteView):
+    model = FriendMessage
+    template_name = 'accounts/delete_message.html'
+    
+
 
 @login_required(login_url='log-in')
 def delete_friend_message(request, pk):
@@ -99,7 +105,7 @@ def delete_friend_message(request, pk):
         except ValueError:
             print("no file associated with it")        
         message.delete()
-        return redirect(f'/friend/{friend.username}')
+        return redirect(f'/friend/{friend.id}')
     context = {
         'message':message,
         'channels':channels,
