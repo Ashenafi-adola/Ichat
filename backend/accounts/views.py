@@ -112,36 +112,20 @@ class UserProfile(DetailView):
         context['groups'] = Group.objects.all()
         context['users'] = CustomUser.objects.all()
         context['user'] = CustomUser.objects.get(id=self.kwargs['pk'])
+        return context
+    
+class ViewSharedMedia(ListView):
+    model = FriendMessage
+    template_name = 'accounts/shared_media.html'
 
-@login_required(login_url='log-in')
-def user_profile(request, pk):
-    profile = 'user'
-    user = CustomUser.objects.get(id=pk)
-    channels = Channel.objects.all()
-    users = CustomUser.objects.all()
-    groups = Group.objects.all()
-    messages = FriendMessage.objects.all()
-
-    context = {
-        'profile':profile,
-        'user':user,
-        'groups':groups,
-        'channels':channels,
-        'users':users,
-        'messages':messages,
-    }
-    return render(request, 'accounts/profile.html', context)
-
-@login_required(login_url='log-in')
-def view_friend_media(request, pk):
-    channels = Channel.objects.all()
-    users = CustomUser.objects.all()
-    groups = Group.objects.all()
-    message = FriendMessage.objects.get(id=pk)
-    context = {
-        'groups':groups,
-        'channels':channels,
-        'users':users,
-        'message':message,
-    }
-    return render(request, 'accounts/display_media.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['channels'] = Channel.objects.all()
+        context['groups'] = Group.objects.all()
+        context['users'] = CustomUser.objects.all()
+        context['friend'] = CustomUser.objects.get(id=self.kwargs['pk'])
+        context['messages'] = FriendMessage.objects.filter(
+            Q(sender=self.request.user, reciever=context['friend']) | Q(sender=context['friend'], reciever=self.request.user),
+            Q(image__isnull=False) | Q(video__isnull=False)
+        ).order_by('-created_at')
+        return context
