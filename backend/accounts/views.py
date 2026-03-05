@@ -85,6 +85,7 @@ class EditFriendMessage(UpdateView):
         context['friend'] = FriendMessage.objects.get(id=self.kwargs['pk']).reciever
         return context
     
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
 class DeleteFriendMessage(DeleteView):
     model = FriendMessage
     template_name = 'accounts/delete_message.html'
@@ -101,30 +102,16 @@ class DeleteFriendMessage(DeleteView):
         context['friend'] = context['message'].reciever
         return context
 
+class UserProfile(DetailView):
+    model = CustomUser
+    template_name = 'accounts/profile.html'
 
-@login_required(login_url='log-in')
-def delete_friend_message(request, pk):
-    message = FriendMessage.objects.get(id=pk)
-    friend = message.reciever
-    channels = Channel.objects.all()
-    users = CustomUser.objects.all()
-    groups = Group.objects.all()
-
-    if request.method == 'POST':
-        try:
-            os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
-        except ValueError:
-            print("no file associated with it")        
-        message.delete()
-        return redirect(f'/friend/{friend.id}')
-    context = {
-        'message':message,
-        'channels':channels,
-        'users':users,
-        'groups':groups,
-        'friend':friend,
-    }
-    return render(request, 'accounts/delete_message.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['channels'] = Channel.objects.all()
+        context['groups'] = Group.objects.all()
+        context['users'] = CustomUser.objects.all()
+        context['user'] = CustomUser.objects.get(id=self.kwargs['pk'])
 
 @login_required(login_url='log-in')
 def user_profile(request, pk):

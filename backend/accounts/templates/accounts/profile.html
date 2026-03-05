@@ -3,21 +3,17 @@
 {% block chat %}
 
 <div class="container-fluid py-4">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center ">
         <div class="col-lg-8">
             <!-- Group Profile Card -->
             <h1 class="card-title mb-2"><a href="{{request.META.HTTP_REFERER}}">⬅️</a> Profile</h1>
             <div class="card shadow mb-4">
                 <div class="card-body text-center">
-                    <a href="{% url 'friend' user.username %}" class="list-group-item list-group-item-action">
-                        <img src="{{ user.profile.url }}" alt="profile" style="width: 150px; height: 150px; border-radius: 75px;">
-                        {{ user.username}}
-                    </a>
+                    <img src="{{ user.profile.url }}" alt="profile" style="width: 150px; height: 150px; border-radius: 75px;">
                 </div>
-                    <h2 class="card-title mb-2">{{ user.username }}</h2>
+                    <h2 class="card-title text-center mb-2">{{ user.username }}</h2>
                 </div>
             </div>
-
             <div class="row">
                 
                 <div class="col-12">

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container-fluid vh-100">
     <div class="row h-100">
-        <div class="col-md-4 col-lg-3 border-end d-flex flex-column">
+        <div class="col-md-4 col-lg-3 border-end d-flex flex-column collapse d-md-block" id="sidebar">
             <div class="p-3 flex-grow-1 overflow-auto">
                 <a href="{% url 'create_group' %}" class="btn btn-primary mb-3">Create New Group</a>
                 <a href="{% url 'create_channel' %}" class="btn btn-primary mb-3">Create New Channel</a>
@@ -15,36 +15,34 @@
                     </div>
                 </form>
                 <div class="nav flex-column">
-                    <button class="nav-link">All</button>
-                    <button class="nav-link">Groups</button>
-                    <button class="nav-link">Channels</button>
-                    <button class="nav-link">Friends</button>
+                    <button class="nav-link"><i class="fas fa-inbox"></i> All</button>
+                    <button class="nav-link"><i class="fas fa-users"></i> Groups</button>
+                    <button class="nav-link"><i class="fas fa-broadcast-tower"></i> Channels</button>
+                    <button class="nav-link"><i class="fas fa-user-friends"></i> Friends</button>
                 </div>
                 <hr>
                 <div class="list-group list-group-flush">
                     {% for group in groups %}
                     
-                    <a href="{% url 'group' group.name %}" class="list-group-item list-group-item-action" >
-                        <img src="{{ group.profile.url }}" alt="profile" style="width: 40px; height: 40px; border-radius: 20px;">
+                    <a href="{% url 'group' group.name %}" class="list-group-item list-group-item-action d-flex align-items-center" >
+                        <img src="{{ group.profile.url }}" alt="profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" class="me-2">
                         {{group.name}}
                     </a>
                     {% endfor %}
                     {% for channel in channels %}
-                        <a href="{% url 'channel' channel.id %}" class="list-group-item list-group-item-action">
-                            <img src="{{ channel.profile.url }}" alt="profile" style="width: 40px; height: 40px; border-radius: 20px;">
+                        <a href="{% url 'channel' channel.id %}" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <img src="{{ channel.profile.url }}" alt="profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" class="me-2">
                             {{channel.name}}
                         </a>
                     {% endfor %}
                     {% for user in users %}
                         {% if user != request.user %}
-                            <a href="{% url 'friend' user.id %}" class="list-group-item list-group-item-action">
-                                <div class="d-flex align-items-center">
-                                        <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                             style="width: 40px; height: 40px; font-weight: bold; font-size: 25px;">
-                                            {{ user.username|first|upper }}
-                                        </div>                                
-                                    {{ user.username.capitalize }}
-                                </div>
+                            <a href="{% url 'friend' user.id %}" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                     style="width: 40px; height: 40px; font-weight: bold; font-size: 18px;">
+                                    {{ user.username|first|upper }}
+                                </div>                                
+                                {{ user.username.capitalize }}
                             </a>
                         {% endif %}
                     {% endfor %}
@@ -52,6 +50,11 @@
             </div>
         </div>
         <div class="col-md-8 col-lg-9 d-flex flex-column">
+            <div class="d-block d-md-none p-2 border-bottom">
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
+                    <i class="fas fa-bars"></i> Menu
+                </button>
+            </div>
             <div class="flex-grow-1 d-flex flex-column">
                 {% if page == 'home' %}
                     <div class="text-center py-5 flex-grow-1 d-flex align-items-center justify-content-center">

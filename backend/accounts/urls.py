@@ -4,7 +4,9 @@ from . views import (RegisterView,
                     Home,
                     Friend, 
                     EditFriendMessage, 
-                    DeleteFriendMessage)
+                    DeleteFriendMessage,
+                    UserProfile
+                    )
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
@@ -21,7 +23,7 @@ urlpatterns = [
     # Deleting pages
     path('delete_friend_message/<int:pk>/', DeleteFriendMessage.as_view(), name='delete_fr_message'),
     # Profile pages
-    path('user_profile/<int:pk>', views.user_profile, name="user_profile"),
+    path('user_profile/<int:pk>', UserProfile.as_view(), name="user_profile"),
     
     # Show shared media
     
