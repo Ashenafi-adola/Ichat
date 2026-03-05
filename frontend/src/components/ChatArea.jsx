@@ -30,7 +30,6 @@ function ChatArea() {
           <div className="flex-grow-1 overflow-auto pb-5" style={{ maxHeight: "calc(100vh - 200px)" }}>
             <Message/>
             <Message/>
-            <Message/>
           </div>
         </div>
         <MessageInput/>
