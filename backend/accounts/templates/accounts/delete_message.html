@@ -10,7 +10,7 @@
             <form action="" method="post">
                 {% csrf_token %}
                 <div class="alert alert-warning" role="alert">
-                    <strong>Warning!</strong> Are you sure you want to delete the message: "<em>{{message.body}}</em>"?
+                        <strong>Warning!</strong> Are you sure you want to delete the message: "<em>{{message.body}}</em>"?
                 </div>
                 <div class="d-flex justify-content-end gap-2">
                     <a href="{{request.META.HTTP_REFERER}}" class="btn btn-secondary">Cancel</a>
@@ -20,15 +20,4 @@
         </div>
     </div>
 </div>
-{{ friend.username|json_script:"friend-name" }}
-{{ user.username|json_script:"current-username" }}
-<script>
-    const friendName = JSON.parse(document.getElementById('friend-name').textContent);
-    const currentUsername = JSON.parse(document.getElementById('current-username').textContent);
-    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    
-    const groupSocket = new WebSocket(
-         wsProtocol + '//' + window.location.host + '/ws/friend/' + friendName + '/'
-     );
-</script>
 {% endblock %}

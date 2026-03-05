@@ -83,12 +83,23 @@ class EditFriendMessage(UpdateView):
         context['users'] = CustomUser.objects.all()
         context['messages'] = FriendMessage.objects.all()
         context['friend'] = FriendMessage.objects.get(id=self.kwargs['pk']).reciever
-
         return context
+    
 class DeleteFriendMessage(DeleteView):
     model = FriendMessage
     template_name = 'accounts/delete_message.html'
-    
+
+    def get_success_url(self):
+        return f'/friend/{self.get_context_data()['friend'].id}/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['channels'] = Channel.objects.all()
+        context['groups'] = Group.objects.all()
+        context['users'] = CustomUser.objects.all()
+        context['message'] = FriendMessage.objects.get(id=self.kwargs['pk'])
+        context['friend'] = context['message'].reciever
+        return context
 
 
 @login_required(login_url='log-in')

@@ -1,6 +1,10 @@
 from django.urls import path
 from .import views
-from . views import RegisterView, Home, Friend, EditFriendMessage
+from . views import (RegisterView,
+                    Home,
+                    Friend, 
+                    EditFriendMessage, 
+                    DeleteFriendMessage)
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
@@ -15,7 +19,7 @@ urlpatterns = [
     # Editting pages
     path('edit_friend_message/<int:pk>/', EditFriendMessage.as_view(), name='edit_fr_message'),
     # Deleting pages
-    path('delete_friend_message/<int:pk>/', views.delete_friend_message, name='delete_fr_message'),
+    path('delete_friend_message/<int:pk>/', DeleteFriendMessage.as_view(), name='delete_fr_message'),
     # Profile pages
     path('user_profile/<int:pk>', views.user_profile, name="user_profile"),
     
