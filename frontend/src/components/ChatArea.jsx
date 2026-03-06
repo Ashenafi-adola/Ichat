@@ -24,7 +24,7 @@ function ChatArea() {
           </div>
         </div>
         <div className="card-body d-flex flex-column p-3">
-          <div className="flex-grow-1 overflow-auto pb-5" style={{ maxHeight: "calc(100vh - 297px)" }}>
+          <div className="flex-grow-1 overflow-auto pb-5 hide-scrollbar" style={{ maxHeight: "calc(100vh - 297px)", scrollbarWidth: "none" }}>
             <Message/>
             <Message/>
             <Message/>

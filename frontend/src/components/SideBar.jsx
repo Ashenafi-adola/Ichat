@@ -2,14 +2,33 @@
 import ChatCard from './ChatCard';
 
 function SideBar(){
-    return (
-        <div className="col-md-4 col-lg-3 border-end d-flex flex-column collapse d-md-block" id="sidebar">
-            <div class="p-3 flex-grow-1 overflow-auto">
-                <h3 class="h5">Chats</h3>
+    return (        
+       <div className="col-md-4 col-lg-3 border-end d-flex flex-column collapse d-md-block" style={{minWidth:"200px"}} id="sidebar">
+            <div className="p-3 flex-grow-1 overflow-auto">
+                <div className='card-header'>
+                    <form action="">
+                        <div class="input-group mb-3">
+                            <input type="text" className="form-control" placeholder="Search..." aria-label="Recipient’s username" aria-describedby="button-addon2"/>
+                            <button className="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                        </div>
+                    </form>
+                </div>
                 <hr />
-                
-                
-                <div class="list-group list-group-flush">
+                <div className="list-group list-group-flush overflow-auto pb-5 " style={{maxHeight:"calc(100vh - 200px)", scrollbarWidth: "none"}}>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
+                    <ChatCard/>
                     <ChatCard/>
                 </div>
             </div>

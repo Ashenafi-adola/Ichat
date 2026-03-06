@@ -1,17 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from . forms import FriendMessageForm, CustomUserCreationForm
 from . models import FriendMessage
 from ichat_channel.models import Channel
 from groups.models import Group
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
 from django.db.models import Q
-import os
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.views.generic.edit import ModelFormMixin
 from django.utils.decorators import method_decorator
-from django.urls import reverse_lazy
 
 class RegisterView(CreateView):
     form_class = CustomUserCreationForm
@@ -60,6 +58,7 @@ class Friend(DetailView, ModelFormMixin):
         message.reciever = CustomUser.objects.get(id=self.kwargs['pk'])
         message.save()
         return redirect(f'/friend/{self.kwargs["pk"]}')
+    
     def post(self, request, *args, **kwargs):
         form = FriendMessageForm(request.POST, request.FILES)
         if form.is_valid():

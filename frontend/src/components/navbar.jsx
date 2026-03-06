@@ -15,10 +15,6 @@ function NavBar() {
           >
             <span className="navbar-toggler-icon" />
           </button>
-              <form className="d-flex mt-3" role="search">
-                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                <button className="btn btn-success" type="submit"> Search</button>
-              </form>
           <a className="navbar-brand" href="#">I-CHAT</a>
           <div className="offcanvas offcanvas-start text-bg-dark" tabIndex={-1} id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel" style={{width:"300px"}}>
             <div className="offcanvas-header">
