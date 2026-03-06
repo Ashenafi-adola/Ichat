@@ -24,9 +24,6 @@ function ChatArea() {
           </div>
         </div>
         <div className="card-body d-flex flex-column p-3">
-          <div className="mb-3">
-            <small className="text-muted">Created at </small>
-          </div>
           <div className="flex-grow-1 overflow-auto pb-5" style={{ maxHeight: "calc(100vh - 200px)" }}>
             <Message/>
             <Message/>

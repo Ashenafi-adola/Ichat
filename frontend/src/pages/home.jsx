@@ -1,9 +1,10 @@
 import ChatList from "../components/chatList";
+import SideBar from "../components/SideBar";
 function Home() {
     return (
-        <>
-            <ChatList/>
-        </>
+        <div>
+            <SideBar/>
+        </div>
     );
 }
 

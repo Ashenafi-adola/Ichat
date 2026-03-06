@@ -5,7 +5,6 @@ import './App.css'
 import  NavBar  from './components/navbar'
 import Home from './pages/home'
 import LogInPage from './pages/auth'
-import ChatArea from './components/ChatArea'
 
 
 function App() {
@@ -15,7 +14,6 @@ function App() {
     <>
       <NavBar/> 
       <Home/> 
-      <ChatArea/>
     </>
   )
 }
