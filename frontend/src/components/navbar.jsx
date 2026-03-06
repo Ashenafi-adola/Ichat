@@ -20,7 +20,7 @@ function NavBar() {
                 <button className="btn btn-success" type="submit"> Search</button>
               </form>
           <a className="navbar-brand" href="#">I-CHAT</a>
-          <div className="offcanvas offcanvas-start text-bg-dark" tabIndex={-1} id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel" >
+          <div className="offcanvas offcanvas-start text-bg-dark" tabIndex={-1} id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel" style={{width:"300px"}}>
             <div className="offcanvas-header">
               <h1>ICHAT</h1>
               <button type="button" className="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"/>

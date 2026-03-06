@@ -3,7 +3,6 @@ import SideBar from "../components/SideBar";
 import ChatArea from "../components/ChatArea";
 import { useState } from "react";
 function Home() {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
         <div className="container-fluid vh-100 fixed-bottom">
