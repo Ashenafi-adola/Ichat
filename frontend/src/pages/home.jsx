@@ -6,10 +6,8 @@ function Home() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <div className="container-fluid vh-100">
-            <hr />
-            <hr />
-            <hr />
+        <div className="container-fluid vh-100 fixed-bottom">
+            <div style={{height:'75px'}}></div>
             <div className="row h-100">
                 <SideBar/>
                 <div class="col-md-8 col-lg-9 d-flex flex-column">

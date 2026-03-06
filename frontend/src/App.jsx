@@ -12,8 +12,8 @@ function App() {
 
   return (
     <>
-      <NavBar/>
-      <Home /> 
+      <Home />
+      <NavBar/> 
     </>
   )
 }
