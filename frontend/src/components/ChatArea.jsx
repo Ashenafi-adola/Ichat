@@ -5,7 +5,7 @@ import MessageInput from './MessageInput';
 
 function ChatArea() {
     return (
-      <div className="card h-100 border-0 shadow-sm p-3 mb-5 bg-body-tertiary rounded " >
+      <div className="card h-100 border-0 shadow-sm p-0 mb-5 bg-body-tertiary rounded ">
         <div className="card-header">
           <a href="{% url 'group_profile' group.id %}">
             <img

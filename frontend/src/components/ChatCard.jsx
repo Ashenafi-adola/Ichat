@@ -3,7 +3,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function ChatCard(){
     return (
-        <div>
+        <div style={{ margin:"1px", borderRadius:"10px", padding:"1px", width:"100%"}}>
             <a href="#" className="list-group-item list-group-item-action">
                 <div className="d-flex align-items-center ">
                     <div className="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
