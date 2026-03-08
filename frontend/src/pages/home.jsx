@@ -5,8 +5,8 @@ import { useState } from "react";
 function Home() {
 
     return (
-        <div className="container-fluid vh-100 fixed-bottom">
-            <div style={{height:'75px'}}></div>
+        <div className="container-fluid vh-100 fixed-bottom p-2.5">
+            <div style={{height:'60px'}}></div>
             <div className="row h-100">
                 <SideBar/>
                 <div class="col-md-8 col-lg-9 d-flex flex-column">

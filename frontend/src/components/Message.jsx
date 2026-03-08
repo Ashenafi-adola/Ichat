@@ -4,8 +4,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 function Message() {
     return (
       <div className="mb-2" >
-        <div className="card p-2 bg-light border-0 shadow-sm" style={{ boxShadow: '0 0 15px rgba(0, 123, 255, 0.3)'}}>
-          <div className="card-body p-0">
+        <div className="card p-2 border-1 shadow-sm">
+          <div className="card-body p-0" style={{backgroundColor:"white"}}>
             <div className="d-flex justify-content-between align-items-center mb-2">
               <div className="d-flex align-items-center">
                 <div

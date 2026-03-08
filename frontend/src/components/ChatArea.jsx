@@ -18,13 +18,12 @@ function ChatArea() {
             Group
           </h3>
           <br />
-          <small className="text-muted">discription</small>
           <div>
             <p>4 members</p>
           </div>
         </div>
         <div className="card-body d-flex flex-column p-3">
-          <div className="flex-grow-1 overflow-auto pb-5 hide-scrollbar" style={{ maxHeight: "calc(100vh - 297px)", scrollbarWidth: "none" }}>
+          <div className="flex-grow-1 overflow-auto pb-5" style={{ maxHeight: "calc(100vh - 225px)", scrollbarWidth: "none", backgroundColor:"whilte" }}>
             <Message/>
             <Message/>
             <Message/>
