@@ -11,6 +11,12 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView, D
 from django.views.generic.edit import ModelFormMixin
 from django.utils.decorators import method_decorator
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import generics
+from . serializers import FriendMessageSerialize
+
 class RegisterView(CreateView):
     form_class = CustomUserCreationForm
     template_name = "accounts/sign_up.html"
@@ -128,3 +134,7 @@ class ViewSharedMedia(ListView):
             Q(image__isnull=False) | Q(video__isnull=False)
         ).order_by('-created_at')
         return context
+
+class MessageApiView(generics.ListCreateAPIView):
+    queryset = FriendMessage.objects.all()
+    serializer_class = FriendMessageSerialize

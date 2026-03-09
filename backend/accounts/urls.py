@@ -5,7 +5,8 @@ from . views import (RegisterView,
                     Friend, 
                     EditFriendMessage, 
                     DeleteFriendMessage,
-                    UserProfile,ViewSharedMedia
+                    UserProfile,ViewSharedMedia,
+                    MessageApiView
                     )
 from django.contrib.auth.views import LoginView, LogoutView
 
@@ -26,6 +27,6 @@ urlpatterns = [
     path('user_profile/<int:pk>', UserProfile.as_view(), name="user_profile"),
     
     # Show shared media
-    
+    path('api-message/', MessageApiView.as_view(), name='api-list'),
     path('shared_fr_media/<int:pk>/', ViewSharedMedia.as_view(), name='shared_fr_media'),
 ]
