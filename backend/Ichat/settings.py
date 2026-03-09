@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'groups',
     'ichat_channel',
     'accounts',
+    'rest_framework',
 ]
 
 
