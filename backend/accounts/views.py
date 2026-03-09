@@ -11,10 +11,8 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView, D
 from django.views.generic.edit import ModelFormMixin
 from django.utils.decorators import method_decorator
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from rest_framework import status, generics, viewsets
 from . serializers import FriendMessageSerialize
 
 class RegisterView(CreateView):
@@ -135,6 +133,7 @@ class ViewSharedMedia(ListView):
         ).order_by('-created_at')
         return context
 
-class MessageApiView(generics.ListCreateAPIView):
+class MessageApiView(viewsets.ModelViewSet):
     queryset = FriendMessage.objects.all()
     serializer_class = FriendMessageSerialize
+    permission_classes = [AllowAny]

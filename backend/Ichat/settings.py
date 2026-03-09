@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'ichat_channel',
     'accounts',
     'rest_framework',
-    'coresheaders',
+    'corsheaders',
 ]
 
 CORS_ORIGIN_WHITELIST = [
