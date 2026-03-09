@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
 from django.db.models import Q
 import os
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from django.utils.decorators import method_decorator
 
 @method_decorator(login_required(login_url='log-in'), name='dispatch')
@@ -21,45 +21,30 @@ class CreateGroup(CreateView):
         group.members.add(self.request.user)
         return redirect(f'home') 
 
-@login_required(login_url='log-in')
-def group(request, group_name):
-    group = Group.objects.get(name=group_name)
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
-
-    p = request.GET.get('p') if request.GET.get('p') != None else ''
-    channels = Channel.objects.filter(Q(name__icontains=q))
-    groups = Group.objects.filter(name__icontains=q)
-    users = CustomUser.objects.filter(username__icontains=q)
-
-    messages = GroupMessage.objects.filter(
-        Q(body__icontains = p)
-    )
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
+class GroupView(DetailView):
+    model = Group
+    template_name = 'groups/group.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["channels"] = Channel.objects.all()
+        context["groups"] = Group.objects.all()
+        context["form"] = GroupMessageForm()
+        context["users"] = CustomUser.objects.all()
+        context["messages"] = GroupMessage.objects.all()
+        context["group"] = Group.objects.get(id= self.kwargs['pk'])
+        context["members"] = Group.objects.get(id=self.kwargs['pk']).members.all()
+        return context
     
-    members = group.members.all()
-    
-    form = GroupMessageForm()
-    if request.method == "POST":
-        if request.POST.get('ok') == 'OK':
-            group.members.add(request.user)
-            return redirect(f'/group/group/{pk}')
+    def post(self, request, *args, **kwargs):
+        group = Group.objects.get(id=self.kwargs['pk'])
         form = GroupMessageForm(request.POST, request.FILES)
         if form.is_valid():
             message = form.save(commit=False)
             message.owner = request.user
             message.group = group
             message.save()
-        
-
-    context = {
-        'group':group,
-        'groups':groups,
-        'form':form,
-        'messages':messages,
-        'users':users,
-        'members': members,
-        'channels':channels
-    }
-    return render(request, 'groups/group.html', context)
+        return redirect(f'/group/group/{group.id}/')
 
 @login_required(login_url='log-in')
 def edit_group_message(request, pk):
