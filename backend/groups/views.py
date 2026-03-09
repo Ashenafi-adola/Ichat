@@ -6,22 +6,20 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
 from django.db.models import Q
 import os
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
+from django.utils.decorators import method_decorator
 
-@login_required(login_url='log-in')
-def create_group(request):
-    form = GroupForm()
-    if request.method == "POST":
-        form = GroupForm(request.POST, request.FILES)
-        if form.is_valid():
-            group = form.save(commit=False)
-            group.owner = request.user
-            group.save()
-            group.members.add(request.user)
-            return redirect(f'home')
-    context = {
-        'form' : form,
-    }
-    return render(request, 'groups/create_group_channel.html', context)    
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
+class CreateGroup(CreateView):
+    form_class = GroupForm
+    template_name = 'groups/create_group.html'
+
+    def form_valid(self, form):
+        group = form.save(commit=False)
+        group.owner = self.request.user
+        group.save()
+        group.members.add(self.request.user)
+        return redirect(f'home') 
 
 @login_required(login_url='log-in')
 def group(request, group_name):

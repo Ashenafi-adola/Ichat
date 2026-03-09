@@ -3,7 +3,7 @@ from .import views
 
 urlpatterns = [
     # Creating pages
-    path('create_group/', views.create_group, name='create_group'),
+    path('create_group/', views.CreateGroup.as_view(), name='create_group'),
     # Main pages
     path('group/<str:group_name>/', views.group, name='group'),
     # Editting pages
