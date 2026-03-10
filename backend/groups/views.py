@@ -25,7 +25,7 @@ class GroupView(DetailView):
     model = Group
     template_name = 'groups/group.html'
     def get_context_data(self, **kwargs):
-        context = super().get_context_data()
+        context = super().get_context_data(**kwargs)
         context["channels"] = Channel.objects.all()
         context["groups"] = Group.objects.all()
         context["form"] = GroupMessageForm()
@@ -56,7 +56,6 @@ class EditGroupMessage(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context = super().get_context_data()
         context["channels"] = Channel.objects.all()
         context["groups"] = Group.objects.all()
         context["users"] = CustomUser.objects.all()
@@ -66,70 +65,55 @@ class EditGroupMessage(UpdateView):
         context["members"] = GroupMessage.objects.get(id=self.kwargs['pk']).group.members.all()
         return context
  
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
 class DeleteGroupMessage(DeleteView):
-    model
-@login_required(login_url='log-in')
-def delete_group_message(request, pk):
-    delete = 'message'
-    message = GroupMessage.objects.get(id=pk)
-    group = message.group
-    groups = Group.objects.all()
-    users = CustomUser.objects.all()
-    channels = Channel.objects.all()
+    model = GroupMessage
+    template_name = 'groups/delete_page.html'
 
-
-    if request.method == "POST":
-        try:
-            os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
-        except ValueError:
-            print("no file associated with it")
-        message.delete()
-        return redirect(f'/group/group/{group.name}')
-    context = {
-        'message':message,
-        'group':group,
-        'groups':groups,
-        'users':users,
-        'channels': channels,
-        'delete': delete,
-    }
-    return  render(request, 'groups/delete_page.html', context)
-
-@login_required(login_url='log-in')
-def group_profile(request, pk):
-    profile = 'group'
-    group = Group.objects.get(id=pk)
-    channels = Channel.objects.all()
-    users = CustomUser.objects.all()
-    groups = Group.objects.all()
-    members = group.members.all()
-    messages = GroupMessage.objects.filter(group=group)
-
+    def get_success_url(self):
+        return f'/group/group/{self.get_context_data()['group'].id}/'
     
-    context = {
-        'profile':profile,
-        'group':group,
-        'groups':groups,
-        'channels':channels,
-        'users':users,
-        'members':members,
-        'messages':messages,
-    }
-    return render(request, 'groups/profile.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['delete'] = 'message'
+        context["channels"] = Channel.objects.all()
+        context["groups"] = Group.objects.all()
+        context["users"] = CustomUser.objects.all()
+        context['message'] = GroupMessage.objects.get(id=self.kwargs['pk'])
+        context["group"] = GroupMessage.objects.get(id=self.kwargs['pk']).group
+        return context
+ 
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
+class GroupProfile(DetailView):
+    model = Group
+    template_name = 'groups/profile.html'
 
-@login_required(login_url='log-in')
-def view_group_media(request, pk):
-    channels = Channel.objects.all()
-    users = CustomUser.objects.all()
-    groups = Group.objects.all()
-    message = GroupMessage.objects.get(id=pk)
-    context = {
-        'groups':groups,
-        'channels':channels,
-        'users':users,
-        'message':message,
-    }
-    return render(request, 'groups/display_media.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile'] = 'group'
+        context["channels"] = Channel.objects.all()
+        context["groups"] = Group.objects.all()
+        context["form"] = GroupMessageForm()
+        context["users"] = CustomUser.objects.all()
+        context["messages"] = GroupMessage.objects.filter(group=Group.objects.get(id= self.kwargs['pk']))
+        context["group"] = Group.objects.get(id= self.kwargs['pk'])
+        context["members"] = Group.objects.get(id=self.kwargs['pk']).members.all()
+        return context
+  
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
+class ViewGroupMedia(DetailView):
+    model = GroupMessage
+    template_name = 'groups/display_media.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["channels"] = Channel.objects.all()
+        context["groups"] = Group.objects.all()
+        context["users"] = CustomUser.objects.all()
+        context['message'] = GroupMessage.objects.get(id=self.kwargs['pk'])
+        return context
+
+
 
 @login_required(login_url='log-in')
 def delete_group(request,pk):
