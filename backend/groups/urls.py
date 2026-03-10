@@ -10,7 +10,7 @@ urlpatterns = [
     path('edit_group_message/<int:pk>/', views.EditGroupMessage.as_view(), name='edit_gp_message'),
     # Deleting pages
     path('delete_group_message/<int:pk>/', views.DeleteGroupMessage.as_view(), name='delete_gp_message'),
-    path('delete_group/<int:pk>/', views.delete_group, name='delete_gp'),
+    path('delete_group/<int:pk>/', views.DeleteGroup.as_view(), name='delete_gp'),
     # Profile pages
     path('group_profile/<int:pk>/', views.GroupProfile.as_view(), name="group_profile"),
     # Show shared media

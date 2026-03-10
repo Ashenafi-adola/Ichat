@@ -113,32 +113,19 @@ class ViewGroupMedia(DetailView):
         context['message'] = GroupMessage.objects.get(id=self.kwargs['pk'])
         return context
 
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
+class DeleteGroup(DeleteView):
+    model = Group
+    template_name = "groups/delete_page.html"
 
-
-@login_required(login_url='log-in')
-def delete_group(request,pk):
-    delete = 'group'
-    group = Group.objects.get(id=pk)
-    channels = Channel.objects.all()
-    users = CustomUser.objects.all()
-    groups = Group.objects.all()
-    messages = GroupMessage.objects.filter(group=group)
-
-    if request.method == "POST":
-        for message in messages:
-            try:
-                os.remove(f'D:/Django/Ichat/Ichat{message.shared_media.url}')
-            except ValueError:
-                print("no file associated with it")
-            message.delete()
-        group.delete()
-        return redirect('home')
-
-    context = {
-        'group':group,
-        'delete':delete,
-        'groups':groups,
-        'channels':channels,
-        'users':users,
-    }
-    return render(request, 'groups/delete_page.html', context)
+    def get_success_url(self):
+        return f'home'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['delete'] = 'group'
+        context["channels"] = Channel.objects.all()
+        context["groups"] = Group.objects.all()
+        context["users"] = CustomUser.objects.all()
+        context["group"] = Group.objects.get(id=self.kwargs['pk'])
+        return context    
