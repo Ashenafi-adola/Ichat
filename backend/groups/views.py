@@ -21,7 +21,6 @@ class CreateGroup(CreateView):
         group.members.add(self.request.user)
         return redirect(f'home') 
 
-@method_decorator(login_required(login_url='log-in'), name='dispatch')
 class GroupView(DetailView):
     model = Group
     template_name = 'groups/group.html'
@@ -46,35 +45,29 @@ class GroupView(DetailView):
             message.save()
         return redirect(f'/group/group/{group.id}/')
 
-@login_required(login_url='log-in')
-def edit_group_message(request, pk):
-    groups = Group.objects.all()
-    messages = GroupMessage.objects.all()
-    users = CustomUser.objects.all()
-    message = GroupMessage.objects.get(id=pk)
-    group = message.group
-    members = group.members.all()
-    channels = Channel.objects.all()
+@method_decorator(login_required(login_url='log-in'), name='dispatch')
+class EditGroupMessage(UpdateView):
+    model = GroupMessage
+    form_class = GroupMessageForm
+    template_name = 'groups/group.html'
 
-    form = GroupMessageForm(instance=message)
+    def get_success_url(self):
+        return f'/group/group/{self.get_context_data()['group'].id}/'
 
-    if request.method == "POST":
-        form = GroupMessageForm(request.POST, instance=message)
-        if form.is_valid():
-            form.save()
-            return redirect(f'/group/group/{group.id}/')
-    context = {
-        'group':group,
-        'groups':groups,
-        'form':form,
-        'messages':messages,
-        'users':users,
-        'members': members,
-        'channels': channels
-    }
-
-    return render(request, 'groups/group.html', context)
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context = super().get_context_data()
+        context["channels"] = Channel.objects.all()
+        context["groups"] = Group.objects.all()
+        context["users"] = CustomUser.objects.all()
+        context["messages"] = GroupMessage.objects.all()
+        context['message'] = GroupMessage.objects.get(id=self.kwargs['pk'])
+        context["group"] = GroupMessage.objects.get(id=self.kwargs['pk']).group
+        context["members"] = GroupMessage.objects.get(id=self.kwargs['pk']).group.members.all()
+        return context
+ 
+class DeleteGroupMessage(DeleteView):
+    model
 @login_required(login_url='log-in')
 def delete_group_message(request, pk):
     delete = 'message'

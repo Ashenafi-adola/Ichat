@@ -7,7 +7,7 @@ urlpatterns = [
     # Main pages
     path('group/<int:pk>/', views.GroupView.as_view(), name='group'),
     # Editting pages
-    path('edit_group_message/<int:pk>/', views.edit_group_message, name='edit_gp_message'),
+    path('edit_group_message/<int:pk>/', views.EditGroupMessage.as_view(), name='edit_gp_message'),
     # Deleting pages
     path('delete_group_message/<int:pk>/', views.delete_group_message, name='delete_gp_message'),
     path('delete_group/<int:pk>/', views.delete_group, name='delete_gp'),
